@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects
+# Map /admin to admin.html (clean URL without extension)
+/admin    /admin.html    200

@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Claude Code
+.claude/
+
+# Server-side cache (not needed for deployment)
+data/
+
+# Local data files (not needed for deployment)
+youtube-*.csv
+MEUDIO.TXT
+
+# OS
+.DS_Store
+Thumbs.db

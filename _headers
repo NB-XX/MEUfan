@@ -1,0 +1,8 @@
+# Cloudflare Pages headers — cache strategy
+# mapping.json: always check for updates (the file changes when new subs are added)
+/mapping.json
+  Cache-Control: public, max-age=0, must-revalidate
+
+# SRT subtitle files: long-term cache (content is immutable once uploaded)
+/subtitles/*
+  Cache-Control: public, max-age=31536000, immutable
