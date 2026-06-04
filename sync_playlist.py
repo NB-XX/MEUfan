@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Sync YouTube playlist data to mapping.json via yt-dlp.
+Sync YouTube playlist data to mapping.json.
 Fetches latest playlist, discovers local SRT files, auto-matches by title similarity,
 merges with existing mapping.json (preserving manual edits), and writes updated file.
 
@@ -13,9 +13,10 @@ Usage:
 import json
 import os
 import re
-import subprocess
 import sys
 import io
+import html
+import urllib.request
 from collections import defaultdict
 from difflib import SequenceMatcher
 from pathlib import Path
@@ -28,8 +29,7 @@ BASE_DIR = Path(__file__).parent
 MAPPING_PATH = BASE_DIR / 'mapping.json'
 SUBTITLE_DIR = BASE_DIR / 'subtitles'
 PLAYLIST_URL = 'https://www.youtube.com/playlist?list=PLPI_XuP-34e7OFxjz2udmZSKlyuDcAhiu'
-YTDLP_PATH = r'C:\Tool\yt-dlp.exe'
-PROXY = 'http://127.0.0.1:7890'
+PLAYLIST_PAGE_URL = PLAYLIST_URL + '&hl=en&gl=US'
 
 KNOWN_LANGS = ['ko', 'en', 'ja', 'zh']
 LANG_LABELS = {'ko': '한국어', 'en': 'English', 'ja': '日本語', 'zh': '中文'}
@@ -154,56 +154,156 @@ def match_srt_to_videos(playlist_videos, srt_groups, threshold=0.55):
     return matches
 
 
-# ===== YouTube Playlist Fetch =====
+# ===== YouTube Playlist Fetch (stdlib, no yt-dlp) =====
 
 def fetch_playlist():
-    """Fetch playlist data via yt-dlp --flat-playlist --dump-json."""
-    if not os.path.exists(YTDLP_PATH):
-        print(f"ERROR: yt-dlp not found at {YTDLP_PATH}")
-        print("  Download from: https://github.com/yt-dlp/yt-dlp/releases")
-        sys.exit(1)
-
-    cmd = [YTDLP_PATH, '--flat-playlist', '--dump-json', PLAYLIST_URL]
-    env = os.environ.copy()
-    env['HTTPS_PROXY'] = PROXY
-    env['HTTP_PROXY'] = PROXY
-
-    print(f"Fetching playlist: {PLAYLIST_URL}")
+    """Fetch playlist data from YouTube's public playlist page."""
+    print(f"Fetching playlist page: {PLAYLIST_URL}")
     try:
-        result = subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=60)
-        if result.returncode != 0:
-            print(f"ERROR: yt-dlp failed (exit {result.returncode})")
-            print(result.stderr[:500] if result.stderr else '(no stderr)')
-            sys.exit(1)
-    except subprocess.TimeoutExpired:
-        print("ERROR: yt-dlp timed out (proxy may be down)")
-        sys.exit(1)
-    except FileNotFoundError:
-        print(f"ERROR: Cannot run {YTDLP_PATH}")
+        page = fetch_url(PLAYLIST_PAGE_URL)
+        initial_data = extract_yt_initial_data(page)
+        renderers = find_playlist_video_renderers(initial_data)
+    except Exception as e:
+        print(f"ERROR: cannot fetch playlist page: {e}")
         sys.exit(1)
 
     videos = []
-    for line in result.stdout.strip().split('\n'):
-        if not line.strip():
+    seen = set()
+    for renderer in renderers:
+        video_id = renderer.get('videoId') or ''
+        if not video_id or video_id in seen:
             continue
-        try:
-            data = json.loads(line)
-        except json.JSONDecodeError:
-            continue
+        seen.add(video_id)
 
-        # Get best thumbnail (largest available)
-        thumbs = data.get('thumbnails') or []
-        thumb_url = thumbs[-1]['url'] if thumbs else ''
+        title = text_from_runs(renderer.get('title')) or renderer.get('title', {}).get('simpleText', '')
+        title = html.unescape(title).strip()
+        if not title or title.lower() in ('private video', 'deleted video'):
+            continue
 
         videos.append({
-            'videoId': data.get('id', ''),
-            'title': data.get('title', ''),
-            'duration': data.get('duration') or 0,
-            'thumbnailUrl': thumb_url,
-            'liveStatus': data.get('live_status', ''),
+            'videoId': video_id,
+            'videoUrl': f'https://www.youtube.com/watch?v={video_id}',
+            'title': title,
+            'duration': parse_duration_seconds(text_from_runs(renderer.get('lengthText'))),
+            'thumbnailUrl': best_thumbnail_url(renderer.get('thumbnail')),
+            'liveStatus': '',
         })
 
+    if not videos:
+        print("ERROR: no videos found in playlist page")
+        sys.exit(1)
+
     return videos
+
+
+def fetch_url(url):
+    request = urllib.request.Request(
+        url,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+                          '(KHTML, like Gecko) Chrome/125.0 Safari/537.36',
+            'Accept-Language': 'en-US,en;q=0.9',
+        },
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        return response.read().decode('utf-8', errors='replace')
+
+
+def extract_yt_initial_data(page):
+    marker = 'ytInitialData'
+    marker_pos = page.find(marker)
+    fallback = None
+    while marker_pos >= 0:
+        assign_pos = page.find('=', marker_pos)
+        if assign_pos < 0:
+            break
+        start = page.find('{', assign_pos)
+        if start < 0:
+            break
+        try:
+            end = find_json_object_end(page, start)
+            candidate = json.loads(page[start:end])
+            if fallback is None:
+                fallback = candidate
+            if find_playlist_video_renderers(candidate):
+                return candidate
+        except (ValueError, json.JSONDecodeError):
+            pass
+        marker_pos = page.find(marker, marker_pos + len(marker))
+    if fallback is not None:
+        return fallback
+    raise ValueError('ytInitialData not found')
+
+
+def find_json_object_end(text, start):
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if in_string:
+            if escape:
+                escape = False
+            elif ch == '\\':
+                escape = True
+            elif ch == '"':
+                in_string = False
+            continue
+        if ch == '"':
+            in_string = True
+        elif ch == '{':
+            depth += 1
+        elif ch == '}':
+            depth -= 1
+            if depth == 0:
+                return i + 1
+    raise ValueError('unterminated JSON object')
+
+
+def find_playlist_video_renderers(obj):
+    found = []
+    if isinstance(obj, dict):
+        renderer = obj.get('playlistVideoRenderer')
+        if isinstance(renderer, dict):
+            found.append(renderer)
+        for value in obj.values():
+            found.extend(find_playlist_video_renderers(value))
+    elif isinstance(obj, list):
+        for item in obj:
+            found.extend(find_playlist_video_renderers(item))
+    return found
+
+
+def text_from_runs(value):
+    if not isinstance(value, dict):
+        return ''
+    if 'simpleText' in value:
+        return str(value.get('simpleText') or '')
+    runs = value.get('runs') or []
+    return ''.join(str(run.get('text') or '') for run in runs if isinstance(run, dict))
+
+
+def best_thumbnail_url(thumbnail):
+    thumbs = []
+    if isinstance(thumbnail, dict):
+        thumbs = thumbnail.get('thumbnails') or []
+    if not thumbs:
+        return ''
+    best = max(thumbs, key=lambda t: (t.get('width') or 0) * (t.get('height') or 0))
+    return best.get('url') or ''
+
+
+def parse_duration_seconds(text):
+    text = (text or '').strip()
+    if not text:
+        return 0
+    parts = text.split(':')
+    if not all(part.isdigit() for part in parts):
+        return 0
+    seconds = 0
+    for part in parts:
+        seconds = seconds * 60 + int(part)
+    return seconds
 
 
 # ===== Merge Logic =====
@@ -234,8 +334,11 @@ def merge(existing, playlist, srt_matches, srt_groups):
         # Start with playlist data
         entry = {
             'videoId': vid,
+            'videoUrl': pv.get('videoUrl') or old.get('videoUrl') or f'https://www.youtube.com/watch?v={vid}',
             'title': pv['title'],
             'duration': pv.get('duration') or old.get('duration', 0),
+            'thumbnailUrl': pv.get('thumbnailUrl') or old.get('thumbnailUrl', ''),
+            'liveStatus': pv.get('liveStatus') or old.get('liveStatus', ''),
             'subtitles': {}
         }
 

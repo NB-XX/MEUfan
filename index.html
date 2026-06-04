@@ -14,7 +14,7 @@
   --highlight:rgba(255,107,157,0.35);--highlight-current:rgba(124,92,231,0.4);
   --font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
 }
-html,body{height:100%;overflow:hidden}
+html,body{height:100%;height:100dvh;overflow:hidden}
 body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex;flex-direction:column}
 
 /* ===== Header ===== */
@@ -46,7 +46,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 }
 .search-wrap .clear-btn.visible{display:block}
 .search-wrap .clear-btn:hover{color:var(--text)}
-/* Language controls */
+/* Subtitle display controls */
 .lang-controls{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .lang-controls select,.lang-controls button{
   padding:5px 8px;border:1px solid var(--border);border-radius:14px;
@@ -70,6 +70,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 
 /* ===== Main Layout ===== */
 .main{flex:1;display:flex;overflow:hidden}
+.mobile-results-toggle{
+  display:none;align-items:center;justify-content:center;gap:6px;
+  width:100%;padding:8px 10px;border:0;border-bottom:1px solid var(--border);
+  background:var(--surface);color:var(--text);font-size:12px;font-family:var(--font);
+  cursor:pointer;flex-shrink:0;
+}
 
 /* ===== Results Panel ===== */
 .results-panel{width:420px;min-width:280px;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--bg);overflow:hidden;min-height:0}
@@ -159,12 +165,33 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 /* ===== Video Panel ===== */
 .video-panel{flex:1;display:flex;flex-direction:column;background:#000;min-width:0}
 .player-container{position:relative;width:100%;aspect-ratio:16/9;max-height:55vh;background:#000;flex-shrink:0}
+.youtube-player{position:absolute;inset:0;width:100%;height:100%}
 .player-container iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 .player-placeholder{
   position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;color:var(--text-dim);gap:8px;pointer-events:none;
 }
 .player-placeholder .icon{font-size:42px}
+.floating-subtitle{
+  position:absolute;left:50%;bottom:8%;transform:translateX(-50%);
+  width:min(92%,900px);z-index:5;pointer-events:none;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.floating-subtitle.hidden{display:none}
+.floating-subtitle .float-line{
+  display:inline-block;max-width:100%;padding:4px 12px;border-radius:6px;
+  background:rgba(0,0,0,0.68);color:#fff;font-size:22px;font-weight:700;line-height:1.35;
+  text-shadow:0 1px 2px #000,0 0 8px #000;white-space:pre-wrap;
+}
+.floating-subtitle .float-line.secondary{font-size:18px;font-weight:600;background:rgba(0,0,0,0.56)}
+.player-container:fullscreen{width:100vw;height:100vh;max-height:none;aspect-ratio:auto;background:#000}
+.player-container:fullscreen .floating-subtitle{bottom:9%}
+.player-container:fullscreen .floating-subtitle .float-line{font-size:clamp(24px,4.2vw,52px)}
+.player-container:fullscreen .floating-subtitle .float-line.secondary{font-size:clamp(19px,3.2vw,40px)}
+.player-container:-webkit-full-screen{width:100vw;height:100vh;max-height:none;aspect-ratio:auto;background:#000}
+.player-container:-webkit-full-screen .floating-subtitle{bottom:9%}
+.player-container:-webkit-full-screen .floating-subtitle .float-line{font-size:clamp(24px,4.2vw,52px)}
+.player-container:-webkit-full-screen .floating-subtitle .float-line.secondary{font-size:clamp(19px,3.2vw,40px)}
 .video-info-bar{
   padding:7px 16px;background:var(--surface2);font-size:11px;font-weight:600;
   display:none;align-items:center;gap:6px;flex-shrink:0;
@@ -172,12 +199,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 .video-info-bar.visible{display:flex}
 .video-info-bar .thumb-sm{width:32px;height:24px;border-radius:3px;object-fit:cover;flex-shrink:0}
 .video-info-bar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.video-info-bar .lang-controls{max-width:360px;overflow-x:auto}
 .local-subtitle-search{
   width:180px;max-width:36%;padding:5px 8px;border:1px solid var(--border);border-radius:6px;
   background:var(--surface);color:var(--text);font-size:11px;font-family:var(--font);
 }
 .local-subtitle-search:focus{outline:none;border-color:var(--accent)}
 .local-subtitle-search.hidden{display:none}
+.video-tool-btn{
+  flex-shrink:0;padding:5px 8px;border:1px solid var(--border);border-radius:6px;
+  background:var(--surface);color:var(--text-dim);font-size:11px;font-family:var(--font);
+  cursor:pointer;
+}
+.video-tool-btn:hover,.video-tool-btn.active{color:#fff;border-color:var(--accent)}
+.video-tool-btn.active{background:rgba(255,107,157,0.18)}
 .subtitle-overlay{
   flex:1;overflow-y:auto;padding:12px 18px;background:var(--surface);font-size:13px;line-height:1.7;
 }
@@ -217,14 +252,48 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .main{flex-direction:column}
-  .results-panel{width:100%;min-width:0;max-height:38vh;border-right:none;border-bottom:1px solid var(--border)}
-  .player-container{max-height:32vh}
+  .main.results-collapsed .results-panel{display:none}
+  .mobile-results-toggle{display:flex}
+  .results-panel{width:100%;min-width:0;height:34dvh;max-height:34dvh;border-right:none;border-bottom:1px solid var(--border)}
+  .video-panel{min-height:0;flex:1}
+  .player-container{max-height:33dvh}
   .header{padding:6px 8px;gap:6px}
   .header .logo{font-size:15px}
-  .subtitle-overlay{max-height:22vh}
-  .results-panel{max-height:38vh;min-height:0;overflow:hidden}
+  .search-wrap{order:10;flex-basis:100%;max-width:none}
+  .video-info-bar{flex-wrap:wrap;padding:7px 10px}
+  .video-info-bar span{flex-basis:calc(100% - 42px)}
+  .video-info-bar .lang-controls{flex:1 1 100%;max-width:none;overflow-x:auto}
+  .video-info-bar .lang-controls select,.video-info-bar .bilingual-toggle{font-size:12px;padding:6px 8px}
+  .video-tool-btn{padding:6px 8px}
+  .local-subtitle-search{width:100%;max-width:none;flex-basis:100%;font-size:13px;padding:8px 10px}
+  .floating-subtitle{bottom:7%;width:94%}
+  .floating-subtitle .float-line{font-size:17px;padding:3px 9px}
+  .floating-subtitle .float-line.secondary{font-size:15px}
+  .subtitle-overlay{flex:1;max-height:none;min-height:0;padding:10px 12px;font-size:13px}
+  .results-panel{min-height:0;overflow:hidden}
   .browse-view{overflow-y:auto}
   .video-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));flex-shrink:0}
+}
+@media(max-width:900px) and (orientation:landscape) and (max-height:520px){
+  .header{padding:4px 8px;gap:6px}
+  .header .logo{display:none}
+  .mode-btn{padding:4px 9px}
+  .search-wrap{order:0;flex-basis:auto;min-width:180px}
+  .main{flex-direction:row}
+  .main.results-collapsed .results-panel{display:none}
+  .mobile-results-toggle{display:flex;width:100%;border-bottom:1px solid var(--border);border-right:0;padding:5px 8px}
+  .results-panel{width:34vw;min-width:220px;height:auto;max-height:none;border-right:1px solid var(--border);border-bottom:0}
+  .player-container{max-height:56dvh}
+  .video-info-bar{padding:5px 8px;flex-wrap:nowrap}
+  .video-info-bar .thumb-sm{display:none}
+  .video-info-bar span{flex-basis:auto}
+  .video-info-bar .lang-controls{max-width:260px}
+  .video-tool-btn{padding:4px 7px;font-size:10px}
+  .local-subtitle-search{width:190px;max-width:38%;flex-basis:auto;font-size:11px;padding:5px 8px}
+  .floating-subtitle{bottom:5%;width:94%}
+  .floating-subtitle .float-line{font-size:16px}
+  .floating-subtitle .float-line.secondary{font-size:14px}
+  .subtitle-overlay{font-size:12px;line-height:1.55;padding:8px 10px}
 }
 </style>
 </head>
@@ -239,13 +308,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
   <div class="search-wrap" id="searchWrap">
     <input type="text" id="searchInput" placeholder="Search subtitles..." autocomplete="off" disabled>
     <button class="clear-btn" id="clearBtn" title="Clear">✕</button>
-  </div>
-  <div class="lang-controls">
-    <select id="langSelect"><option value="ko">한국어</option></select>
-    <label class="bilingual-toggle" id="bilingualToggle" title="Bilingual mode">
-      <input type="checkbox" id="bilingualCheck">⇆ Bilingual
-    </label>
-    <select id="bilingualLangSelect" style="display:none"><option value="en">English</option></select>
   </div>
   <div class="header-right">
     <span class="result-count" id="resultCount"></span>
@@ -273,15 +335,27 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);display:flex
 
   <!-- Video Panel -->
   <div class="video-panel" id="videoPanel">
+    <button class="mobile-results-toggle" id="mobileResultsToggle" type="button">Results</button>
     <div class="player-container" id="playerContainer">
+      <div class="youtube-player" id="youtubePlayer"></div>
       <div class="player-placeholder" id="playerPlaceholder">
         <div class="icon"></div>
         <p>검색 결과에서 자막을 클릭하면<br>영상이 여기에 재생됩니다</p>
       </div>
+      <div class="floating-subtitle hidden" id="floatingSubtitle"></div>
     </div>
     <div class="video-info-bar" id="videoInfoBar">
       <img class="thumb-sm" id="videoInfoThumb" src="" onerror="this.style.display='none'">
       <span id="videoInfoTitle"></span>
+      <div class="lang-controls">
+        <select id="langSelect"><option value="ko">한국어</option></select>
+        <label class="bilingual-toggle" id="bilingualToggle" title="Bilingual mode">
+          <input type="checkbox" id="bilingualCheck">⇆ Bilingual
+        </label>
+        <select id="bilingualLangSelect" style="display:none"><option value="en">English</option></select>
+      </div>
+      <button class="video-tool-btn active" id="floatingSubtitleBtn" type="button" title="Toggle floating subtitles">CC</button>
+      <button class="video-tool-btn" id="playerFullscreenBtn" type="button" title="Fullscreen with floating subtitles">Fullscreen</button>
       <input class="local-subtitle-search hidden" id="localSubtitleSearch" type="text" autocomplete="off" placeholder="Search in this subtitle">
     </div>
     <div class="subtitle-overlay" id="subtitleOverlay">
@@ -323,7 +397,7 @@ var dataReady=false;
 var currentQuery='',localSubtitleQuery='',currentVideoIdx=-1,currentSubIdx=-1,currentResults=[];
 var currentLang='ko',bilingualMode=false,bilingualLang='en';
 var currentMode='search';
-var player=null,playerReady=false,syncInterval=null,pendingPlay=null;
+var player=null,playerReady=false,syncInterval=null,pendingPlay=null,floatingSubtitlesEnabled=true;
 
 // ===== DOM Ref =====
 var searchInput=document.getElementById('searchInput');
@@ -333,7 +407,13 @@ var resultsList=document.getElementById('resultsList');
 var emptyState=document.getElementById('emptyState');
 var browseView=document.getElementById('browseView');
 var searchWrap=document.getElementById('searchWrap');
+var mainEl=document.querySelector('.main');
+var mobileResultsToggle=document.getElementById('mobileResultsToggle');
+var playerContainer=document.getElementById('playerContainer');
 var playerPlaceholder=document.getElementById('playerPlaceholder');
+var floatingSubtitle=document.getElementById('floatingSubtitle');
+var floatingSubtitleBtn=document.getElementById('floatingSubtitleBtn');
+var playerFullscreenBtn=document.getElementById('playerFullscreenBtn');
 var subtitleOverlay=document.getElementById('subtitleOverlay');
 var loadingOverlay=document.getElementById('loadingOverlay');
 var progressFill=document.getElementById('progressFill');
@@ -565,7 +645,7 @@ var tag=document.createElement('script');
 tag.src='https://www.youtube.com/iframe_api';
 document.getElementsByTagName('script')[0].parentNode.insertBefore(tag,document.getElementsByTagName('script')[0]);
 window.onYouTubeIframeAPIReady=function(){
-  player=new YT.Player('playerContainer',{
+  player=new YT.Player('youtubePlayer',{
     height:'100%',width:'100%',videoId:'',
     playerVars:{autoplay:0,controls:1,rel:0,modestbranding:1},
     events:{onReady:onPlayerReady,onStateChange:onPlayerStateChange}
@@ -586,10 +666,11 @@ function syncSubtitle(){
   try{
     var ct=player.getCurrentTime();
     var subs=videos[currentVideoIdx].subtitles[currentLang];
-    if(!subs||subs.length===0)return;
-    var lo=0,hi=subs.length-1,best=-1;
-    while(lo<=hi){var mid=(lo+hi)>>1;if(subs[mid].start<=ct){best=mid;lo=mid+1}else hi=mid-1}
-    if(best!==currentSubIdx){currentSubIdx=best;highlightCurrentSubtitle();scrollToCurrentSubtitle();}
+    if(!subs||subs.length===0){updateFloatingSubtitle(ct);return;}
+    var active=activeSubtitlesAt(subs,ct);
+    var nextIdx=active.length?active[0].idx:-1;
+    if(nextIdx!==currentSubIdx){currentSubIdx=nextIdx;highlightCurrentSubtitle();scrollToCurrentSubtitle();}
+    updateFloatingSubtitle(ct);
   }catch(e){}
 }
 
@@ -609,11 +690,66 @@ function scrollToCurrentSubtitle(){
   if(line)line.scrollIntoView({block:'center',behavior:'smooth'});
 }
 
+function updateFloatingSubtitle(currentTime){
+  if(!floatingSubtitle||!floatingSubtitlesEnabled||currentVideoIdx<0){
+    hideFloatingSubtitle();return;
+  }
+  var video=videos[currentVideoIdx],lines=[];
+  if(!video){hideFloatingSubtitle();return;}
+
+  var primary=activeSubtitlesAt(video.subtitles[currentLang]||[],currentTime);
+  for(var i=0;i<primary.length;i++)lines.push({text:primary[i].text,secondary:false});
+
+  if(bilingualMode&&bilingualLang!==currentLang){
+    var secondary=activeSubtitlesAt(video.subtitles[bilingualLang]||[],currentTime);
+    for(var j=0;j<secondary.length;j++)lines.push({text:secondary[j].text,secondary:true});
+  }
+
+  if(lines.length===0){hideFloatingSubtitle();return;}
+  floatingSubtitle.innerHTML=lines.map(function(line){
+    return '<div class="float-line '+(line.secondary?'secondary':'')+'">'+escHtml(line.text)+'</div>';
+  }).join('');
+  floatingSubtitle.classList.remove('hidden');
+}
+
+function hideFloatingSubtitle(){
+  if(floatingSubtitle){floatingSubtitle.classList.add('hidden');floatingSubtitle.innerHTML='';}
+}
+
+function activeSubtitlesAt(subs,currentTime){
+  if(!subs||subs.length===0||currentTime===undefined||currentTime===null)return [];
+  var active=[];
+  for(var i=0;i<subs.length;i++){
+    if(subs[i].start>currentTime)break;
+    if(subs[i].start<=currentTime&&currentTime<=subs[i].end){
+      active.push({idx:i,text:subs[i].text,start:subs[i].start,end:subs[i].end});
+    }
+  }
+  return active;
+}
+
+function applyClickedResultLanguage(vIdx,lang){
+  var video=videos[vIdx];if(!video||!lang||!video.subtitles||!video.subtitles[lang])return;
+  if(!video.subtitles[currentLang]){
+    currentLang=lang;
+  }else if(bilingualMode&&lang!==currentLang){
+    bilingualLang=lang;
+  }
+  normalizeVideoLanguageState(vIdx);
+}
+
+function activePrimaryIndexAt(vIdx,currentTime){
+  var video=videos[vIdx];if(!video)return -1;
+  var active=activeSubtitlesAt(video.subtitles[currentLang]||[],currentTime);
+  return active.length?active[0].idx:-1;
+}
+
 // ===== Search =====
 function doSearch(query){
   if(!dataReady)return;
   query=query.trim().toLowerCase();currentQuery=query;
   if(!query){showEmptyState();clearBtn.classList.remove('visible');resultCount.textContent='';return;}
+  setMobileResultsCollapsed(false);
   clearBtn.classList.add('visible');
   var results=[],terms=query.split(/\s+/).filter(function(t){return t.length>0});
   for(var i=0;i<searchIndex.length;i++){
@@ -668,11 +804,11 @@ function renderSubItem(entry,terms){
 // ===== Video Playback =====
 function playAt(vIdx,sIdx,startTime,lang){
   var video=videos[vIdx];if(!video||!video.videoId)return;
-  if(lang&&videos[vIdx].subtitles[lang])currentLang=lang;
-  currentVideoIdx=vIdx;currentSubIdx=sIdx;
+  applyClickedResultLanguage(vIdx,lang);
+  currentVideoIdx=vIdx;currentSubIdx=activePrimaryIndexAt(vIdx,startTime);
   localSubtitleSearch.value=localSubtitleQuery;
 
-  if(!player||!playerReady){pendingPlay={vIdx:vIdx,sIdx:sIdx,startTime:startTime,lang:lang};playerPlaceholder.style.display='none';renderSubtitles(vIdx);updateVideoInfo(video);return;}
+  if(!player||!playerReady){pendingPlay={vIdx:vIdx,sIdx:sIdx,startTime:startTime,lang:lang};playerPlaceholder.style.display='none';renderSubtitles(vIdx);hideFloatingSubtitle();updateVideoInfo(video);return;}
   try{
     var vd=player.getVideoData?player.getVideoData():null;
     if(vd&&vd.video_id===video.videoId){player.seekTo(startTime,true);player.playVideo();}
@@ -680,7 +816,8 @@ function playAt(vIdx,sIdx,startTime,lang){
   }catch(e){player.loadVideoById({videoId:video.videoId,startSeconds:startTime,suggestedQuality:'default'});}
   playerPlaceholder.style.display='none';
   renderSubtitles(vIdx);
-  setTimeout(function(){highlightCurrentSubtitle();scrollToCurrentSubtitle();},400);
+  setMobileResultsCollapsed(true);
+  setTimeout(function(){highlightCurrentSubtitle();scrollToCurrentSubtitle();updateFloatingSubtitle(startTime);},400);
   updateVideoInfo(video);
 }
 
@@ -693,15 +830,18 @@ function loadVideoSubtitles(vIdx,lang){
   if(player&&playerReady){try{player.loadVideoById({videoId:video.videoId,startSeconds:0,suggestedQuality:'default'});}catch(e){}}
   playerPlaceholder.style.display='none';
   renderSubtitles(vIdx);
+  hideFloatingSubtitle();
+  setMobileResultsCollapsed(true);
   updateVideoInfo(video);
 }
 
 function renderSubtitles(vIdx){
+  normalizeVideoLanguageState(vIdx);
   var subs=videos[vIdx].subtitles[currentLang];
   if(!subs||subs.length===0){
     // Try to find any available language
     var avail=Object.keys(videos[vIdx].subtitles);
-    if(avail.length>0){currentLang=avail[0];subs=videos[vIdx].subtitles[currentLang];}
+    if(avail.length>0){currentLang=avail[0];normalizeVideoLanguageState(vIdx);subs=videos[vIdx].subtitles[currentLang];}
     else{subtitleOverlay.innerHTML='<div class="no-subs-hint">'+t('noVideoSubs')+'</div>';return;}
   }
 
@@ -725,6 +865,7 @@ function renderSubtitles(vIdx){
 }
 
 function renderBilingualSubtitles(vIdx){
+  normalizeVideoLanguageState(vIdx);
   var primary=videos[vIdx].subtitles[currentLang]||[];
   var secondary=videos[vIdx].subtitles[bilingualLang]||[];
   if(secondary.length===0){
@@ -754,22 +895,53 @@ function renderBilingualSubtitles(vIdx){
   subtitleOverlay.scrollTop=0;
 }
 
+function normalizeVideoLanguageState(vIdx){
+  var video=videos[vIdx];if(!video)return;
+  var avail=Object.keys(video.subtitles||{});
+  if(avail.length===0)return;
+  if(avail.indexOf(currentLang)<0)currentLang=avail[0];
+  if(avail.length>1&&(avail.indexOf(bilingualLang)<0||bilingualLang===currentLang)){
+    bilingualLang=avail.filter(function(l){return l!==currentLang})[0]||bilingualLang;
+  }
+  if(avail.length<2){
+    bilingualMode=false;
+    bilingualCheck.checked=false;
+    bilingualToggle.classList.remove('active');
+    bilingualLangSelect.style.display='none';
+  }
+  langSelect.value=currentLang;
+  rebuildBilingualLangOptions(avail);
+}
+
+function rebuildBilingualLangOptions(avail){
+  bilingualLangSelect.innerHTML='';
+  for(var i=0;i<avail.length;i++){
+    if(avail[i]===currentLang)continue;
+    var opt=document.createElement('option');
+    opt.value=avail[i];opt.textContent=LANG_LABELS[avail[i]]||avail[i];
+    if(avail[i]===bilingualLang)opt.selected=true;
+    bilingualLangSelect.appendChild(opt);
+  }
+  bilingualToggle.style.display=avail.length>1?'':'none';
+  bilingualLangSelect.value=bilingualLang;
+}
+
 function seekSubtitle(idx){
   if(!player||!playerReady||currentVideoIdx<0)return;
   var subs=videos[currentVideoIdx].subtitles[currentLang];
-  if(idx>=0&&idx<subs.length){currentSubIdx=idx;player.seekTo(subs[idx].start,true);player.playVideo();highlightCurrentSubtitle();}
+  if(idx>=0&&idx<subs.length){currentSubIdx=idx;player.seekTo(subs[idx].start,true);player.playVideo();highlightCurrentSubtitle();updateFloatingSubtitle(subs[idx].start);}
 }
 
 function seekSubtitleInLang(lang,idx){
   if(!player||!playerReady||currentVideoIdx<0)return;
   var subs=videos[currentVideoIdx].subtitles[lang];
   if(idx>=0&&subs&&idx<subs.length){
-    currentLang=lang;
-    langSelect.value=lang;
-    currentSubIdx=idx;
+    applyClickedResultLanguage(currentVideoIdx,lang);
+    currentSubIdx=activePrimaryIndexAt(currentVideoIdx,subs[idx].start);
     player.seekTo(subs[idx].start,true);
     player.playVideo();
     highlightCurrentSubtitle();
+    updateFloatingSubtitle(subs[idx].start);
   }
 }
 
@@ -826,9 +998,11 @@ function switchMode(mode){
   document.getElementById('modeSearchBtn').classList.toggle('active',mode==='search');
   document.getElementById('modeBrowseBtn').classList.toggle('active',mode==='browse');
   if(mode==='search'){
+    setMobileResultsCollapsed(false);
     searchWrap.style.display='';resultsList.style.display=currentQuery?'block':'none';
     emptyState.style.display=currentQuery?'none':'flex';browseView.style.display='none';
   }else{
+    setMobileResultsCollapsed(false);
     searchWrap.style.display='none';resultsList.style.display='none';emptyState.style.display='none';
     browseView.style.display='flex';renderBrowseView();
   }
@@ -871,12 +1045,69 @@ function showEmptyState(){
   resultCount.textContent='';
 }
 
+function isMobileViewport(){
+  return window.matchMedia('(max-width: 768px), (max-width: 900px) and (orientation: landscape) and (max-height: 520px)').matches;
+}
+
+function setMobileResultsCollapsed(collapsed){
+  if(!mainEl)return;
+  if(!isMobileViewport())collapsed=false;
+  mainEl.classList.toggle('results-collapsed',!!collapsed);
+  updateMobileResultsToggle();
+}
+
+function updateMobileResultsToggle(){
+  if(!mainEl||!mobileResultsToggle)return;
+  mobileResultsToggle.textContent=mainEl.classList.contains('results-collapsed')?'Show results':'Hide results';
+}
+
+function currentPlayerTime(){
+  if(!player||!playerReady)return null;
+  try{return player.getCurrentTime();}catch(e){return null;}
+}
+
+function toggleFloatingSubtitles(){
+  floatingSubtitlesEnabled=!floatingSubtitlesEnabled;
+  floatingSubtitleBtn.classList.toggle('active',floatingSubtitlesEnabled);
+  if(floatingSubtitlesEnabled)updateFloatingSubtitle(currentPlayerTime());
+  else hideFloatingSubtitle();
+}
+
+function togglePlayerFullscreen(){
+  if(!playerContainer)return;
+  var fullscreenElement=document.fullscreenElement||document.webkitFullscreenElement;
+  if(fullscreenElement){
+    if(document.exitFullscreen)document.exitFullscreen();
+    else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+  }else if(playerContainer.requestFullscreen){
+    playerContainer.requestFullscreen();
+  }else if(playerContainer.webkitRequestFullscreen){
+    playerContainer.webkitRequestFullscreen();
+  }
+}
+
+function updateFullscreenButton(){
+  var fullscreenElement=document.fullscreenElement||document.webkitFullscreenElement;
+  var active=fullscreenElement===playerContainer;
+  if(playerFullscreenBtn)playerFullscreenBtn.classList.toggle('active',active);
+  if(playerFullscreenBtn)playerFullscreenBtn.textContent=active?'Exit fullscreen':'Fullscreen';
+}
+
 // ===== Events =====
 var debounce=null;
 searchInput.addEventListener('input',function(){clearTimeout(debounce);debounce=setTimeout(function(){doSearch(searchInput.value)},200)});
 searchInput.addEventListener('keydown',function(e){if(e.key==='Escape'){searchInput.value='';doSearch('');searchInput.blur()}});
 clearBtn.addEventListener('click',function(){searchInput.value='';doSearch('');searchInput.focus()});
 document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();searchInput.focus();searchInput.select()}});
+mobileResultsToggle.addEventListener('click',function(){
+  if(!mainEl)return;
+  setMobileResultsCollapsed(!mainEl.classList.contains('results-collapsed'));
+});
+window.addEventListener('resize',function(){setMobileResultsCollapsed(mainEl&&mainEl.classList.contains('results-collapsed'))});
+floatingSubtitleBtn.addEventListener('click',toggleFloatingSubtitles);
+playerFullscreenBtn.addEventListener('click',togglePlayerFullscreen);
+document.addEventListener('fullscreenchange',function(){updateFullscreenButton();updateFloatingSubtitle(currentPlayerTime());});
+document.addEventListener('webkitfullscreenchange',function(){updateFullscreenButton();updateFloatingSubtitle(currentPlayerTime());});
 localSubtitleSearch.addEventListener('input',function(){
   localSubtitleQuery=this.value;
   if(currentVideoIdx>=0)renderSubtitles(currentVideoIdx);
@@ -885,15 +1116,23 @@ localSubtitleSearch.addEventListener('input',function(){
 // Language events
 langSelect.addEventListener('change',function(){
   currentLang=this.value;
+  if(currentVideoIdx>=0)normalizeVideoLanguageState(currentVideoIdx);
   if(currentVideoIdx>=0)renderSubtitles(currentVideoIdx);
+  updateFloatingSubtitle(currentPlayerTime());
 });
-bilingualToggle.addEventListener('click',function(){
+bilingualToggle.addEventListener('click',function(e){
+  e.preventDefault();
+  if(currentVideoIdx>=0){
+    normalizeVideoLanguageState(currentVideoIdx);
+    if(bilingualLangSelect.options.length===0)return;
+  }
   bilingualMode=!bilingualMode;bilingualCheck.checked=bilingualMode;
   bilingualToggle.classList.toggle('active',bilingualMode);
   bilingualLangSelect.style.display=bilingualMode?'':'none';
   if(currentVideoIdx>=0)renderSubtitles(currentVideoIdx);
+  updateFloatingSubtitle(currentPlayerTime());
 });
-bilingualLangSelect.addEventListener('change',function(){bilingualLang=this.value;if(bilingualMode&&currentVideoIdx>=0)renderSubtitles(currentVideoIdx)});
+bilingualLangSelect.addEventListener('change',function(){bilingualLang=this.value;if(bilingualMode&&currentVideoIdx>=0)renderSubtitles(currentVideoIdx);updateFloatingSubtitle(currentPlayerTime())});
 
 // Mode events
 document.getElementById('modeSearchBtn').addEventListener('click',function(){switchMode('search')});
@@ -908,8 +1147,10 @@ document.getElementById('filterLang').addEventListener('change',renderBrowseView
 document.getElementById('btnReload').addEventListener('click',function(){
   currentQuery='';currentVideoIdx=-1;currentSubIdx=-1;currentResults=[];
   localSubtitleQuery='';localSubtitleSearch.value='';localSubtitleSearch.classList.add('hidden');
+  hideFloatingSubtitle();
   searchInput.value='';resultCount.textContent='';
   emptyState.style.display='flex';resultsList.style.display='none';browseView.style.display='none';
+  setMobileResultsCollapsed(false);
   subtitleOverlay.innerHTML='<div class="no-subs-hint">'+t('subsEmpty')+'</div>';
   document.getElementById('videoInfoBar').classList.remove('visible');
   playerPlaceholder.style.display='flex';clearBtn.classList.remove('visible');

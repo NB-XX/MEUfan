@@ -5,8 +5,7 @@ YouTube 直播字幕全局搜索 + 双语字幕 + 在线管理后台。
 ## 启动
 
 ```bash
-# 安装依赖（仅 yt-dlp 用于 YouTube 同步）
-# 下载 yt-dlp.exe 放到 D:\Tool\yt-dlp\ 或修改 sync_playlist.py 中的路径
+# 无需额外依赖；YouTube 同步使用 Python 标准库抓取播放列表页
 
 # 启动服务器
 python server.py

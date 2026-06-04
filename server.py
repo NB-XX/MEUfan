@@ -581,9 +581,17 @@ class APIHandler(SimpleHTTPRequestHandler):
     def handle_sync(self):
         """Run sync_playlist.py."""
         try:
+            env = os.environ.copy()
+            env['PYTHONIOENCODING'] = 'utf-8'
             result = subprocess.run(
                 [sys.executable, str(BASE_DIR / 'sync_playlist.py')],
-                capture_output=True, text=True, timeout=60, cwd=str(BASE_DIR)
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='replace',
+                timeout=60,
+                cwd=str(BASE_DIR),
+                env=env
             )
             self.send_json({
                 'ok': result.returncode == 0,
