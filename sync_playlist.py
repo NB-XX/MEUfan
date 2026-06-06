@@ -10,12 +10,14 @@ Usage:
   python sync_playlist.py --no-match   # Skip SRT auto-matching
 """
 
+import datetime
 import json
 import os
 import re
 import sys
 import io
 import html
+import time
 import urllib.request
 from collections import defaultdict
 from difflib import SequenceMatcher
@@ -28,6 +30,8 @@ if sys.platform == 'win32':
 BASE_DIR = Path(__file__).parent
 MAPPING_PATH = BASE_DIR / 'mapping.json'
 SUBTITLE_DIR = BASE_DIR / 'subtitles'
+DATA_DIR = BASE_DIR / 'data'
+PUBLISH_CACHE_PATH = DATA_DIR / 'youtube_publish_cache.json'
 PLAYLIST_URL = 'https://www.youtube.com/playlist?list=PLPI_XuP-34e7OFxjz2udmZSKlyuDcAhiu'
 PLAYLIST_PAGE_URL = PLAYLIST_URL + '&hl=en&gl=US'
 
@@ -57,6 +61,12 @@ def extract_lang(filename):
     name = filename
     if name.lower().endswith('.srt'):
         name = name[:-4]
+    prefixed = re.match(r'^\[([a-z]{2}(?:-[a-z]{2,4})?)-[a-zA-Z0-9_-]+\]\s*(.+)$', name)
+    if prefixed:
+        lang_token = prefixed.group(1).lower()
+        for lang, aliases in LANG_ALIASES.items():
+            if lang_token in aliases:
+                return prefixed.group(2), lang
     name = re.sub(r'\.srt([._-])', r'\1', name, flags=re.IGNORECASE)
     lowered = name.lower()
     tokens = [token for token in re.split(r'[^a-z0-9]+', lowered) if token]
@@ -180,6 +190,7 @@ def fetch_playlist():
         if not title or title.lower() in ('private video', 'deleted video'):
             continue
 
+        published_at = find_video_date(renderer)
         videos.append({
             'videoId': video_id,
             'videoUrl': f'https://www.youtube.com/watch?v={video_id}',
@@ -187,6 +198,7 @@ def fetch_playlist():
             'duration': parse_duration_seconds(text_from_runs(renderer.get('lengthText'))),
             'thumbnailUrl': best_thumbnail_url(renderer.get('thumbnail')),
             'liveStatus': '',
+            'publishedAt': published_at,
         })
 
     if not videos:
@@ -194,6 +206,182 @@ def fetch_playlist():
         sys.exit(1)
 
     return videos
+
+
+def load_publish_cache():
+    if not PUBLISH_CACHE_PATH.exists():
+        return {}
+    try:
+        with open(PUBLISH_CACHE_PATH, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data if isinstance(data, dict) else {}
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+
+def save_publish_cache(cache):
+    DATA_DIR.mkdir(exist_ok=True)
+    with open(PUBLISH_CACHE_PATH, 'w', encoding='utf-8') as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+
+def fetch_publish_dates(videos, existing_lookup=None):
+    """Fetch publish dates for videos by scraping individual watch pages."""
+    if existing_lookup is None:
+        existing_lookup = {}
+
+    cache = load_publish_cache()
+    need_dates = []
+    for v in videos:
+        vid = v['videoId']
+        existing_date = existing_lookup.get(vid, {}).get('publishedAt', '')
+        cached_date = cache.get(vid, {}).get('publishedAt', '') if isinstance(cache.get(vid), dict) else ''
+        if existing_date:
+            v['publishedAt'] = existing_date
+        elif v.get('publishedAt'):
+            cache[vid] = {'publishedAt': v['publishedAt'], 'fetchedAt': datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(), 'source': 'playlist'}
+        elif cached_date:
+            v['publishedAt'] = cached_date
+        else:
+            need_dates.append(v)
+
+    if not need_dates:
+        print(f"\n  All publish dates already cached ({len(videos)} videos)")
+        save_publish_cache(cache)
+        return
+
+    print(f"\n  Fetching publish dates for {len(need_dates)} new videos...")
+    fetched = 0
+    for i, v in enumerate(need_dates):
+        try:
+            date_str = fetch_video_publish_date(v['videoId'])
+            if date_str:
+                v['publishedAt'] = date_str
+                cache[v['videoId']] = {'publishedAt': date_str, 'fetchedAt': datetime.datetime.now(datetime.timezone.utc).replace(microsecond=0).isoformat(), 'source': 'watch'}
+                fetched += 1
+        except Exception as e:
+            print(f"    date fetch failed for {v['videoId']}: {e}")
+
+        if (i + 1) % 5 == 0:
+            print(f"    {i+1}/{len(need_dates)}...")
+        time.sleep(0.5)
+
+    save_publish_cache(cache)
+    print(f"  Fetched {fetched}/{len(need_dates)} publish dates")
+
+
+def fetch_video_publish_date(video_id):
+    """Fetch a single video's watch page and extract the publish date."""
+    url = f'https://www.youtube.com/watch?v={video_id}&gl=US&hl=en'
+    page = fetch_url(url)
+    date_str = find_video_date_in_page(page)
+    if date_str:
+        return parse_youtube_date(date_str)
+    return ''
+
+
+def find_video_date_in_page(page):
+    for pattern in (
+        r'"publishDate"\s*:\s*"([^"\\]+)"',
+        r'"uploadDate"\s*:\s*"([^"\\]+)"',
+        r'"datePublished"\s*:\s*"([^"\\]+)"',
+    ):
+        match = re.search(pattern, page)
+        if match:
+            parsed = parse_youtube_date(html.unescape(match.group(1)))
+            if parsed:
+                return parsed
+    try:
+        return find_video_date(extract_yt_initial_data(page))
+    except Exception:
+        return ''
+
+
+def find_video_date(obj):
+    """Find publish date fields in YouTube JSON."""
+    found = []
+
+    def search(o):
+        if isinstance(o, dict):
+            microformat = o.get('playerMicroformatRenderer')
+            if isinstance(microformat, dict):
+                for key in ('publishDate', 'uploadDate', 'datePublished'):
+                    parsed = parse_youtube_date(str(microformat.get(key) or ''))
+                    if parsed:
+                        found.append(parsed)
+                        return
+            for key in ('publishDate', 'uploadDate', 'datePublished'):
+                if key in o:
+                    parsed = parse_youtube_date(str(o.get(key) or ''))
+                    if parsed:
+                        found.append(parsed)
+                        return
+            renderer = o.get('videoPrimaryInfoRenderer')
+            if isinstance(renderer, dict):
+                date_text = renderer.get('dateText', {})
+                date_value = text_from_runs(date_text)
+                parsed = parse_youtube_date(date_value)
+                if parsed:
+                    found.append(parsed)
+                    return
+            for v in o.values():
+                search(v)
+                if found:
+                    return
+        elif isinstance(o, list):
+            for item in o:
+                search(item)
+                if found:
+                    return
+
+    search(obj)
+    return found[0] if found else ''
+
+
+def parse_youtube_date(text):
+    """Parse YouTube's dateText.simpleText into YYYY-MM-DD.
+    Handles prefixed formats: 'Streamed live on Mar 7, 2026', 'Premiered Dec 25, 2025'
+    And plain: 'Dec 25, 2025', '2025. 12. 25.', '25 Dec 2025', '2025年12月25日'
+    """
+    if not text:
+        return ''
+
+    text = html.unescape(str(text)).strip()
+    text = re.sub(r'(?i)^(Streamed live on|Premiered|Premieres|Scheduled for|Published on)\s+', '', text)
+
+    # "2025-12-25" / "2025. 12. 25." / "2025年12月25日"
+    m = re.match(r'(\d{4})\s*[.\-/年]\s*(\d{1,2})\s*[.\-/月]\s*(\d{1,2})', text)
+    if m:
+        try:
+            return datetime.date(int(m.group(1)), int(m.group(2)), int(m.group(3))).isoformat()
+        except (ValueError, OverflowError):
+            pass
+
+    month_names = {
+        'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5, 'jun': 6,
+        'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10, 'nov': 11, 'dec': 12,
+        'january': 1, 'february': 2, 'march': 3, 'april': 4,
+        'june': 6, 'july': 7, 'august': 8, 'september': 9,
+        'october': 10, 'november': 11, 'december': 12,
+    }
+    lower = text.lower().strip()
+    # "Dec 25, 2025"
+    m = re.match(r'([a-z]+)\s+(\d{1,2}),?\s*(\d{4})', lower)
+    if m and m.group(1) in month_names:
+        try:
+            return datetime.date(int(m.group(3)), month_names[m.group(1)], int(m.group(2))).isoformat()
+        except (ValueError, OverflowError):
+            pass
+
+    # "25 Dec 2025"
+    m = re.match(r'(\d{1,2})\s+([a-z]+)\s+(\d{4})', lower)
+    if m and m.group(2) in month_names:
+        try:
+            return datetime.date(int(m.group(3)), month_names[m.group(2)], int(m.group(1))).isoformat()
+        except (ValueError, OverflowError):
+            pass
+
+    return ''
 
 
 def fetch_url(url):
@@ -339,6 +527,7 @@ def merge(existing, playlist, srt_matches, srt_groups):
             'duration': pv.get('duration') or old.get('duration', 0),
             'thumbnailUrl': pv.get('thumbnailUrl') or old.get('thumbnailUrl', ''),
             'liveStatus': pv.get('liveStatus') or old.get('liveStatus', ''),
+            'publishedAt': pv.get('publishedAt') or old.get('publishedAt', ''),
             'subtitles': {}
         }
 
@@ -391,6 +580,9 @@ def main():
     # 4. Load existing mapping
     existing = load_existing_mapping()
     print(f"\nExisting mapping: {len(existing)} entries")
+
+    # 4.5 Fetch publish dates for new videos (scrapes individual watch pages)
+    fetch_publish_dates(playlist, existing)
 
     # 5. Merge
     merged = merge(existing, playlist, srt_matches, srt_groups)

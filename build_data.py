@@ -52,6 +52,12 @@ def extract_lang(filename):
     name = filename
     if name.lower().endswith('.srt'):
         name = name[:-4]  # strip .srt
+    prefixed = re.match(r'^\[([a-z]{2}(?:-[a-z]{2,4})?)-[a-zA-Z0-9_-]+\]\s*(.+)$', name)
+    if prefixed:
+        lang_token = prefixed.group(1).lower()
+        for lang, aliases in LANG_ALIASES.items():
+            if lang_token in aliases:
+                return prefixed.group(2), lang
     name = re.sub(r'\.srt([._-])', r'\1', name, flags=re.IGNORECASE)
     lowered = name.lower()
     tokens = [token for token in re.split(r'[^a-z0-9]+', lowered) if token]
@@ -226,8 +232,10 @@ def main():
     for ci, csv_entry in enumerate(csv_entries):
         entry = {
             'videoId': csv_entry['video_id'],
+            'videoUrl': f'https://www.youtube.com/watch?v={csv_entry["video_id"]}',
             'title': csv_entry['title'],
             'duration': 0,
+            'publishedAt': '',
             'subtitles': {}
         }
 

@@ -10,124 +10,96 @@
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0a14;--bg2:#0d0d1f;--surface:rgba(22,22,42,0.65);--surface2:rgba(30,30,55,0.72);
-  --glass:rgba(20,20,44,0.55);--glass-border:rgba(255,255,255,0.08);
-  --border:rgba(255,255,255,0.07);--text:#e8dff0;--text-dim:#a898c0;
-  --cat-pink:#ff8eb5;--cat-purple:#b388e0;--cat-blue:#7ec8e3;
-  --cat-green:#7dcea0;--cat-silver:#b8b8d0;
-  --accent:var(--cat-pink);--accent2:var(--cat-purple);
-  --green:#2ecc71;--red:#e74c3c;--orange:#f39c12;
+  --bg:#fdf6f8;--bg2:#f8eef2;--surface:#fff;--surface2:#faf5f8;
+  --glass:#fff;--glass-border:#f0dce3;
+  --border:#f0dce3;--text:#4a3f4a;--text-dim:#b8a8b8;
+  --cat-pink:#f0a0b4;--cat-purple:#c4a8d0;--cat-blue:#a0c8e8;
+  --cat-green:#a0d0b8;--cat-silver:#c8c0d0;
+  --accent:var(--cat-pink);--accent2:var(--cat-purple);--accent3:#e8a0a0;
+  --green:#7dcea0;--red:#e8a0a0;--orange:#f0c8a0;
   --font:'Nunito','Zen Maru Gothic',-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
   --font-display:'Zen Maru Gothic','Nunito',-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;
-  --glow-pink:0 0 20px rgba(255,142,181,0.3);--glow-purple:0 0 20px rgba(179,136,224,0.3);
+  --shadow-sm:0 1px 3px rgba(180,150,160,0.08);--shadow:0 2px 8px rgba(180,150,160,0.1);
+  --shadow-lg:0 4px 16px rgba(180,150,160,0.12);
   --radius-sm:10px;--radius:16px;--radius-lg:24px;
 }
 body{
   font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;
-  animation:pageFadeIn 0.6s ease;
+  animation:pageFadeIn 0.5s ease;
 }
-@keyframes pageFadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-body::before{
-  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
-  background:
-    radial-gradient(ellipse 600px 500px at 0% 0%,rgba(255,142,181,0.05),transparent),
-    radial-gradient(ellipse 500px 450px at 100% 0%,rgba(179,136,224,0.04),transparent),
-    radial-gradient(ellipse 550px 480px at 0% 100%,rgba(126,200,227,0.03),transparent),
-    radial-gradient(ellipse 450px 420px at 100% 100%,rgba(125,206,160,0.03),transparent);
-}
+@keyframes pageFadeIn{from{opacity:0}to{opacity:1}}
 .header{
-  background:var(--glass);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3);
-  border-bottom:1px solid var(--glass-border);padding:14px 24px;display:flex;
-  align-items:center;gap:16px;position:sticky;top:0;z-index:100;
+  background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;
+  align-items:center;gap:16px;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm);
 }
 .header h1{
   font-size:19px;font-weight:900;flex:1;font-family:var(--font-display);
-  background:linear-gradient(135deg,var(--cat-pink),var(--cat-purple),var(--cat-blue));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  animation:breathingGlow 4s ease-in-out infinite;
-}
-@keyframes breathingGlow{
-  0%,100%{filter:drop-shadow(0 0 6px rgba(255,142,181,0.4))drop-shadow(0 0 12px rgba(179,136,224,0.2))}
-  50%{filter:drop-shadow(0 0 12px rgba(255,142,181,0.6))drop-shadow(0 0 24px rgba(179,136,224,0.35))}
+  color:var(--cat-pink);
 }
 .header a{color:var(--cat-pink);text-decoration:none;font-size:13px;font-weight:700;transition:color 0.2s}
 .header a:hover{color:var(--cat-purple);text-decoration:none}
 .btn{
-  padding:8px 16px;border:1px solid var(--glass-border);border-radius:9999px;
+  padding:8px 16px;border:1px solid var(--border);border-radius:9999px;
   background:var(--surface);color:var(--text);cursor:pointer;font-size:12px;font-weight:600;
-  font-family:var(--font);transition:all 0.25s;white-space:nowrap;
+  font-family:var(--font);transition:all 0.2s;white-space:nowrap;
 }
-.btn:hover{border-color:var(--cat-pink);color:#fff;box-shadow:var(--glow-pink)}
-.btn-primary{background:linear-gradient(135deg,var(--cat-pink),var(--cat-purple));border-color:transparent;color:#fff}
-.btn-primary:hover{opacity:0.88;box-shadow:var(--glow-pink),0 4px 20px rgba(255,142,181,0.25)}
+.btn:hover{border-color:var(--cat-pink);color:var(--cat-pink)}
+.btn-primary{background:var(--cat-pink);border-color:transparent;color:#fff}
+.btn-primary:hover{opacity:0.85;color:#fff}
 .btn-danger{background:var(--red);border-color:var(--red);color:#fff}
-.btn-danger:hover{opacity:0.85}
+.btn-danger:hover{opacity:0.85;color:#fff}
 .btn-sm{padding:5px 12px;font-size:11px}
 .container{max-width:1400px;margin:0 auto;padding:18px 24px;display:flex;flex-direction:column;height:calc(100vh - 62px);position:relative;z-index:1}
-.table-wrap{flex:1;overflow-y:auto;border:1px solid var(--glass-border);border-radius:var(--radius)}
+.table-wrap{flex:1;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}
 
 /* Toolbar */
 .toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
 .toolbar .sep{flex:1}
+.sort-select{
+  padding:7px 12px;border:1px solid var(--border);border-radius:9999px;
+  background:var(--bg2);color:var(--text);font-size:12px;font-family:var(--font);font-weight:600;
+  cursor:pointer;transition:all 0.2s;outline:none;
+}
+.sort-select:focus{border-color:var(--cat-pink);box-shadow:0 0 0 3px rgba(240,160,180,0.12)}
 .toast{
   position:fixed;bottom:24px;right:24px;z-index:999;
   padding:12px 20px;border-radius:var(--radius);font-size:13px;color:#fff;
   transition:all 0.3s;opacity:0;pointer-events:none;font-weight:600;
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .toast.show{opacity:1}
-.toast.success{background:rgba(46,204,113,0.9);box-shadow:0 4px 16px rgba(46,204,113,0.3)}
-.toast.error{background:rgba(231,76,60,0.9);box-shadow:0 4px 16px rgba(231,76,60,0.3)}
-
-/* Sparkle particles */
-.sparkle-container{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.sparkle{
-  position:absolute;width:3px;height:3px;border-radius:50%;
-  animation:sparkleFloat 8s ease-in-out infinite;opacity:0;
-}
-.sparkle:nth-child(1){left:5%;top:75%;background:var(--cat-pink);animation-delay:0s;animation-duration:9s}
-.sparkle:nth-child(2){left:20%;top:50%;background:var(--cat-purple);animation-delay:1.5s;width:4px;height:4px}
-.sparkle:nth-child(3){left:50%;top:85%;background:var(--cat-blue);animation-delay:3s;animation-duration:10s}
-.sparkle:nth-child(4){left:70%;top:40%;background:var(--cat-green);animation-delay:4.5s;width:5px;height:5px}
-.sparkle:nth-child(5){left:82%;top:65%;background:var(--cat-pink);animation-delay:2s;animation-duration:7.5s}
-.sparkle:nth-child(6){left:12%;top:30%;background:var(--cat-silver);animation-delay:5s;width:3px;height:3px}
-@keyframes sparkleFloat{
-  0%{opacity:0;transform:translateY(0) rotate(0deg) scale(0.5)}
-  15%{opacity:0.8}
-  30%{opacity:0.4;transform:translateY(-40px) rotate(180deg) scale(1.2)}
-  50%{opacity:0.9;transform:translateY(-20px) rotate(300deg) scale(0.8)}
-  70%{opacity:0.3;transform:translateY(-60px) rotate(400deg) scale(1.1)}
-  85%{opacity:0.7;transform:translateY(-30px) rotate(520deg) scale(0.6)}
-  100%{opacity:0;transform:translateY(-80px) rotate(720deg) scale(0.3)}
-}
-
+.toast.success{background:rgba(125,206,160,0.9);box-shadow:0 4px 16px rgba(125,206,160,0.25)}
+.toast.error{background:rgba(232,160,160,0.9);box-shadow:0 4px 16px rgba(232,160,160,0.25)}
 
 /* Video table */
 .video-table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px}
-.video-table th,.video-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--glass-border)}
+.video-table th,.video-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
 .video-table thead th{
-  background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  position:sticky;top:0;z-index:5;font-size:11px;color:var(--text-dim);text-transform:uppercase;
+  background:var(--bg2);position:sticky;top:0;z-index:5;font-size:11px;color:var(--text-dim);text-transform:uppercase;
   font-family:var(--font-display);font-weight:700;letter-spacing:0.5px;
 }
-.video-table tr:hover td{background:rgba(255,142,181,0.04)}
+.video-table th.sortable{cursor:pointer;user-select:none;transition:color 0.2s}
+.video-table th.sortable:hover{color:var(--cat-pink)}
+.video-table th.sortable .sort-arrow{font-size:9px;margin-left:3px;opacity:0.4}
+.video-table th.sortable.sorted .sort-arrow{opacity:1;color:var(--cat-pink)}
+.video-table tr:hover td{background:rgba(240,160,180,0.04)}
 .video-table tbody td{font-family:var(--font)}
 .video-table .vid{font-family:monospace;font-size:11px;color:var(--text-dim);max-width:100px;overflow:hidden;text-overflow:ellipsis}
-.video-table .title-cell{max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.video-table .title-cell{max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .video-table .dur{font-size:11px;color:var(--text-dim);white-space:nowrap}
+.video-table .pub{font-size:11px;color:var(--text-dim);white-space:nowrap}
 
 /* Language slots */
 .lang-slots{display:flex;gap:6px;align-items:center}
 .lang-slot{
   display:flex;align-items:center;gap:5px;padding:4px 10px;
   border-radius:9999px;font-size:11px;white-space:nowrap;
-  border:1.5px dashed var(--glass-border);min-height:30px;transition:all 0.2s;
+  border:1.5px dashed var(--border);min-height:30px;transition:all 0.2s;
 }
-.lang-slot.assigned{border-style:solid;background:var(--surface);border-color:rgba(255,255,255,0.12)}
-.lang-slot.ko{border-color:var(--cat-pink)}.lang-slot.ko.assigned{background:rgba(255,142,181,0.08)}
-.lang-slot.en{border-color:var(--cat-purple)}.lang-slot.en.assigned{background:rgba(179,136,224,0.08)}
-.lang-slot.ja{border-color:var(--red)}.lang-slot.ja.assigned{background:rgba(231,76,60,0.08)}
-.lang-slot.zh{border-color:var(--cat-green)}.lang-slot.zh.assigned{background:rgba(125,206,160,0.08)}
+.lang-slot.assigned{border-style:solid;background:var(--bg2);border-color:var(--border)}
+.lang-slot.ko{border-color:var(--cat-pink)}.lang-slot.ko.assigned{background:rgba(240,160,180,0.06)}
+.lang-slot.en{border-color:var(--cat-purple)}.lang-slot.en.assigned{background:rgba(196,168,208,0.06)}
+.lang-slot.ja{border-color:var(--red)}.lang-slot.ja.assigned{background:rgba(232,160,160,0.06)}
+.lang-slot.zh{border-color:var(--cat-green)}.lang-slot.zh.assigned{background:rgba(160,208,184,0.06)}
 .lang-slot .fn{
   max-width:140px;overflow:hidden;text-overflow:ellipsis;font-size:10px;
   color:var(--text-dim);
@@ -139,34 +111,32 @@ body::before{
 
 /* Upload modal */
 .modal-overlay{
-  display:none;position:fixed;inset:0;background:rgba(5,5,16,0.75);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  display:none;position:fixed;inset:0;background:rgba(200,180,190,0.4);
   z-index:200;align-items:center;justify-content:center;
 }
 .modal-overlay.show{display:flex}
 .modal{
-  background:var(--glass);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1px solid var(--glass-border);border-radius:var(--radius-lg);box-shadow:0 8px 40px rgba(0,0,0,0.4),var(--glow-purple);
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);
   padding:28px;max-width:500px;width:90%;animation:modalIn 0.3s ease;
 }
 @keyframes modalIn{from{opacity:0;transform:scale(0.95)translateY(10px)}to{opacity:1;transform:scale(1)translateY(0)}}
-.modal h3{margin-bottom:18px;font-size:17px;font-family:var(--font-display);font-weight:800}
+.modal h3{margin-bottom:18px;font-size:17px;font-family:var(--font-display);font-weight:800;color:var(--text)}
 .modal .field{margin-bottom:16px}
 .modal .field label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;font-weight:600}
 .modal .field select,.modal .field input[type=text]{
-  width:100%;padding:9px 14px;border:1.5px solid var(--glass-border);border-radius:var(--radius-sm);
-  background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--font);
+  width:100%;padding:9px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  background:var(--bg2);color:var(--text);font-size:13px;font-family:var(--font);
   transition:all 0.2s;outline:none;
 }
-.modal .field select:focus,.modal .field input[type=text]:focus{border-color:var(--cat-pink);box-shadow:0 0 0 3px rgba(255,142,181,0.1)}
+.modal .field select:focus,.modal .field input[type=text]:focus{border-color:var(--cat-pink);box-shadow:0 0 0 3px rgba(240,160,180,0.12)}
 .modal .field input[type=file]{font-size:13px;color:var(--text)}
 .modal .drop-zone{
-  border:2px dashed var(--glass-border);border-radius:var(--radius);padding:36px;text-align:center;
-  color:var(--text-dim);transition:all 0.3s;cursor:pointer;background:rgba(255,255,255,0.02);
+  border:2px dashed var(--border);border-radius:var(--radius);padding:36px;text-align:center;
+  color:var(--text-dim);transition:all 0.3s;cursor:pointer;background:var(--bg2);
 }
 .modal .drop-zone:hover,.modal .drop-zone.dragover{
   border-color:var(--cat-pink);color:var(--cat-pink);
-  background:rgba(255,142,181,0.04);box-shadow:inset 0 0 30px rgba(255,142,181,0.04);
+  background:rgba(240,160,180,0.04);
 }
 .modal .drop-zone .icon{font-size:40px;margin-bottom:10px}
 .modal .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
@@ -174,7 +144,7 @@ body::before{
 /* Scanner */
 .unassigned-list{font-size:13px}
 .unassigned-list .item{
-  display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--glass-border);
+  display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);
   flex-wrap:wrap;
 }
 .unassigned-list .item .name{flex:1;min-width:150px;font-size:12px}
@@ -182,32 +152,34 @@ body::before{
 
 /* Search in table */
 .search-box input{
-  padding:9px 14px;border:1.5px solid var(--glass-border);border-radius:9999px;
-  background:var(--surface2);color:var(--text);font-size:13px;font-family:var(--font);
+  padding:9px 14px;border:1.5px solid var(--border);border-radius:9999px;
+  background:var(--bg2);color:var(--text);font-size:13px;font-family:var(--font);
   width:240px;transition:all 0.2s;outline:none;
 }
-.search-box input:focus{border-color:var(--cat-pink);box-shadow:0 0 0 3px rgba(255,142,181,0.1)}
+.search-box input:focus{border-color:var(--cat-pink);box-shadow:0 0 0 3px rgba(240,160,180,0.12)}
 .stats{font-size:12px;color:var(--text-dim);font-weight:600}
-/* Static mode banner — dreamy style */
+/* Static mode banner */
 .static-banner{
-  background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.25);
+  background:rgba(240,200,160,0.12);border:1px solid rgba(240,200,160,0.3);
   border-radius:var(--radius);padding:12px 18px;margin-bottom:14px;
-  font-size:12px;color:var(--orange);display:flex;align-items:center;gap:10px;
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font-size:12px;color:#c89870;display:flex;align-items:center;gap:10px;
 }
 .static-banner .icon{font-size:18px}
 .static-banner a{color:var(--cat-pink);font-weight:700}
+.panel-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.glossary-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+.glossary-table th,.glossary-table td{border-bottom:1px solid var(--border);padding:8px;text-align:left}
+.glossary-table input{width:100%;padding:7px 9px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);font-family:var(--font);font-size:12px}
+.sync-result{font-size:12px;color:var(--text-dim);margin-bottom:12px;display:none}
+.admin-alias{font-size:12px;color:var(--text-dim);font-weight:700}
 </style>
 </head>
 <body>
-<!-- Dreamcore sparkle particles -->
-<div class="sparkle-container" aria-hidden="true">
-  <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
-  <div class="sparkle"></div><div class="sparkle"></div>
-</div>
 
 <div class="header">
-  <h1 id="pageTitle">🐱 MEU Subtitle Manager</h1>
+  <h1 id="pageTitle">MEU字幕库</h1>
+  <span class="admin-alias" id="adminAlias"></span>
+  <button class="btn btn-sm" id="logoutBtn" onclick="logoutAdmin()">Logout</button>
   <a href="/" target="_blank" id="openAppLink">Open search app</a>
 </div>
 
@@ -218,12 +190,29 @@ body::before{
   </div>
   <div class="toolbar">
     <span class="stats" id="statsBar"></span>
+    <select class="sort-select" id="sortSelect">
+      <option value="default" id="sortDefault">Default order</option>
+      <option value="title" id="sortTitle">Sort by title</option>
+      <option value="duration" id="sortDuration">Sort by duration</option>
+      <option value="published" id="sortPublished">Sort by publish date</option>
+    </select>
     <span class="sep"></span>
     <div class="search-box"><input type="text" id="tableSearch" placeholder="Search videos..."></div>
     <button class="btn btn-primary" id="openUploadBtn" onclick="openUploadModal()">Upload SRT</button>
     <button class="btn" id="openBatchBtn" onclick="openBatchModal()" style="background:var(--accent2);border-color:var(--accent2);color:#fff">Batch import</button>
     <button class="btn" id="scanBtn" onclick="scanSrts()">Scan</button>
     <button class="btn" id="syncBtn" onclick="runSync(event)">Sync YouTube</button>
+    <button class="btn" id="standardizeBtn" onclick="standardizeSubtitles()">Standardize names</button>
+    <button class="btn" id="glossaryBtn" onclick="toggleGlossaryPanel()">Glossary</button>
+  </div>
+  <div class="sync-result" id="syncResult"></div>
+  <div class="panel-card" id="glossaryPanel" style="display:none">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <h3 style="flex:1;font-size:15px;color:var(--cat-pink)">Glossary</h3>
+      <button class="btn btn-sm" onclick="addGlossaryRow()">Add</button>
+      <button class="btn btn-primary btn-sm" onclick="saveGlossary()">Save</button>
+    </div>
+    <table class="glossary-table"><thead><tr><th>Label</th><th>KO</th><th>EN</th><th>JA</th><th>ZH</th><th></th></tr></thead><tbody id="glossaryBody"></tbody></table>
   </div>
 
   <!-- Scanner results -->
@@ -238,7 +227,7 @@ body::before{
   <div class="table-wrap">
     <table class="video-table">
       <thead><tr>
-        <th>#</th><th>Video ID</th><th id="titleTh">Title</th><th id="durationTh">Duration</th>
+        <th>#</th><th>Video ID</th><th id="titleTh" class="sortable" data-sort="title">Title <span class="sort-arrow"></span></th><th id="durationTh" class="sortable" data-sort="duration">Duration <span class="sort-arrow"></span></th><th id="publishedTh" class="sortable" data-sort="published">Published <span class="sort-arrow"></span></th>
         <th style="min-width:200px" id="subtitlesTh">Subtitles</th>
       </tr></thead>
       <tbody id="videoTableBody"></tbody>
@@ -324,15 +313,16 @@ function api(method, path, body){
   if(!apiAvailable){
     return Promise.reject(Error('Management API unavailable in static mode. Run server.py locally.'));
   }
-  var opts={method:method,headers:{}};
+  var opts={method:method,headers:{},credentials:'include'};
   if(body instanceof FormData){opts.body=body}
   else if(body){opts.headers['Content-Type']='application/json';opts.body=JSON.stringify(body)}
-  return fetch(path,opts).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()});
+  return fetch(path,opts).then(function(r){return r.json().then(function(j){if(!r.ok){var e=Error(j.error||('HTTP '+r.status));e.status=r.status;e.details=j;throw e}return j})});
 }
 
 // ===== State =====
 var mapping=null,allVideos=[],apiAvailable=true;
 var uploadFileData=null,uploadFileName=null,uploadDetectedLang='ko';
+var glossary={terms:[]};
 
 // ===== UI language =====
 function detectUiLang(){
@@ -354,7 +344,7 @@ var UI_TEXT={
     batchTitle:'Batch import SRT',batchHelp:'Upload multiple SRT files at once. Language is auto-detected and videos are matched by filename similarity.',
     batchDropText:'Click or drag to select SRT files',batchDropHint:'Only .srt files are supported',
     filename:'Filename',subtitleCount:'Subtitle count',matchedVideo:'Matched video',similarity:'Similarity',
-    importAll:'Import all',stats:'{videos} videos | {withSubs} with subtitles',loadFailed:'Failed to load data: {message}',
+    importAll:'Import all',published:'Published',sortDefault:'Default order',sortTitle:'Title',sortDuration:'Duration',sortPublished:'Publish date',stats:'{videos} videos | {withSubs} with subtitles',loadFailed:'Failed to load data: {message}',
     noRows:'No videos found.',unassignTitle:'Unassign',uploadAssignTitle:'Upload and assign SRT',
     selectFile:'Select a file first.',srtOnly:'Only SRT files can be uploaded.',uploading:'Uploading...',uploadDone:'Uploaded: {filename}',
     uploadAssignDone:'Uploaded and assigned: {filename}',uploadFailed:'Upload failed: {message}',confirmDetach:'Unassign {lang} subtitles?\n(The file will not be deleted.)',
@@ -363,7 +353,7 @@ var UI_TEXT={
     assigning:'Assigning...',assigned:'Assigned {count} files.',allAssigned:'All SRT files are assigned.',
     suggestions:'Auto-match suggestions ({count}):',noSuggestions:'No match suggestions:',assign:'Assign',
     assignedFile:'Assigned: {filename}',scanningFailed:'Scan failed: {message}',syncing:'Syncing...',syncDone:'YouTube sync complete.',
-    syncFailed:'Sync failed: {message}',
+    syncFailed:'Sync failed: {message}',standardizeNames:'Standardize names',standardized:'Standardized {renamed} files, skipped {skipped}.',glossary:'Glossary',logout:'Logout',
     staticModeNotice:'⚠️ Running on static hosting. Management features (upload, assign, sync) are disabled. Clone the repo and run server.py locally for full admin access.',
     staticUploadDisabled:'Upload disabled on static hosting.',
     staticDetachDisabled:'Unassign disabled on static hosting.',
@@ -378,7 +368,7 @@ var UI_TEXT={
     batchTitle:'일괄 SRT 가져오기',batchHelp:'여러 SRT 파일을 한 번에 업로드합니다. 언어는 자동 감지하고, 비디오는 파일명 유사도 기준으로 자동 매칭합니다.',
     batchDropText:'클릭 또는 드래그하여 여러 SRT 파일 선택',batchDropHint:'.srt 파일만 업로드 가능',
     filename:'파일명',subtitleCount:'자막수',matchedVideo:'매칭 비디오',similarity:'유사도',
-    importAll:'모두 가져오기',stats:'총 {videos}개 비디오 | {withSubs}개 자막 있음',loadFailed:'데이터 로드 실패: {message}',
+    importAll:'모두 가져오기',published:'게시일',sortDefault:'기본 순서',sortTitle:'제목순',sortDuration:'재생시간순',sortPublished:'게시일순',stats:'총 {videos}개 비디오 | {withSubs}개 자막 있음',loadFailed:'데이터 로드 실패: {message}',
     noRows:'검색된 비디오가 없습니다.',unassignTitle:'할당 해제',uploadAssignTitle:'SRT 업로드 및 할당',
     selectFile:'파일을 선택해주세요.',srtOnly:'SRT 파일만 업로드 가능합니다.',uploading:'업로드 중...',uploadDone:'업로드 완료: {filename}',
     uploadAssignDone:'업로드 및 할당 완료: {filename}',uploadFailed:'업로드 실패: {message}',confirmDetach:'{lang} 자막 할당을 해제하시겠습니까?\n(파일은 삭제되지 않습니다.)',
@@ -387,7 +377,7 @@ var UI_TEXT={
     assigning:'할당 중...',assigned:'{count}개 파일 할당 완료.',allAssigned:'모든 SRT 파일이 할당되어 있습니다.',
     suggestions:'자동 매칭 제안 ({count}개):',noSuggestions:'매칭 제안 없음:',assign:'할당',
     assignedFile:'할당 완료: {filename}',scanningFailed:'스캔 실패: {message}',syncing:'동기화 중...',syncDone:'YouTube 동기화 완료.',
-    syncFailed:'동기화 실패: {message}',
+    syncFailed:'동기화 실패: {message}',standardizeNames:'파일명 정리',standardized:'{renamed}개 파일 정리, {skipped}개 건너뜀.',glossary:'용어집',logout:'로그아웃',
     staticModeNotice:'⚠️ 정적 호스팅에서 실행 중입니다. 관리 기능(업로드, 할당, 동기화)은 비활성화됩니다. 전체 관리 기능은 로컬에서 server.py를 실행해 사용하세요.',
     staticUploadDisabled:'정적 호스팅에서는 업로드가 비활성화됩니다.',
     staticDetachDisabled:'정적 호스팅에서는 할당 해제가 비활성화됩니다.',
@@ -402,7 +392,7 @@ var UI_TEXT={
     batchTitle:'SRT 一括インポート',batchHelp:'複数の SRT ファイルを一括アップロードします。言語は自動検出し、動画はファイル名の類似度で照合します。',
     batchDropText:'クリックまたはドラッグして SRT ファイルを選択',batchDropHint:'.srt ファイルのみ対応',
     filename:'ファイル名',subtitleCount:'字幕数',matchedVideo:'照合動画',similarity:'類似度',
-    importAll:'すべてインポート',stats:'{videos} 本の動画 | 字幕あり {withSubs} 本',loadFailed:'データ読み込み失敗: {message}',
+    importAll:'すべてインポート',published:'公開日',sortDefault:'デフォルト順',sortTitle:'タイトル順',sortDuration:'再生時間順',sortPublished:'公開日順',stats:'{videos} 本の動画 | 字幕あり {withSubs} 本',loadFailed:'データ読み込み失敗: {message}',
     noRows:'動画が見つかりません。',unassignTitle:'割り当て解除',uploadAssignTitle:'SRT をアップロードして割り当て',
     selectFile:'ファイルを選択してください。',srtOnly:'SRT ファイルのみアップロードできます。',uploading:'アップロード中...',uploadDone:'アップロード完了: {filename}',
     uploadAssignDone:'アップロードと割り当て完了: {filename}',uploadFailed:'アップロード失敗: {message}',confirmDetach:'{lang} 字幕の割り当てを解除しますか？\n(ファイルは削除されません。)',
@@ -411,7 +401,7 @@ var UI_TEXT={
     assigning:'割り当て中...',assigned:'{count} 件を割り当てました。',allAssigned:'すべての SRT ファイルが割り当て済みです。',
     suggestions:'自動照合候補 ({count} 件):',noSuggestions:'照合候補なし:',assign:'割り当て',
     assignedFile:'割り当て完了: {filename}',scanningFailed:'スキャン失敗: {message}',syncing:'同期中...',syncDone:'YouTube 同期完了。',
-    syncFailed:'同期失敗: {message}',
+    syncFailed:'同期失敗: {message}',standardizeNames:'ファイル名整理',standardized:'{renamed} 件を整理、{skipped} 件をスキップしました。',glossary:'用語集',logout:'ログアウト',
     staticModeNotice:'⚠️ 静的ホスティングで実行中です。管理機能(アップロード、割り当て、同期)は無効です。ローカルで server.py を実行すると管理できます。',
     staticUploadDisabled:'静的ホスティングではアップロードできません。',
     staticDetachDisabled:'静的ホスティングでは割り当て解除できません。',
@@ -426,7 +416,7 @@ var UI_TEXT={
     batchTitle:'批量导入 SRT',batchHelp:'一次上传多个 SRT 文件。系统会自动识别语言，并按文件名相似度匹配视频。',
     batchDropText:'点击或拖拽选择多个 SRT 文件',batchDropHint:'仅支持 .srt 文件',
     filename:'文件名',subtitleCount:'字幕数',matchedVideo:'匹配视频',similarity:'相似度',
-    importAll:'全部导入',stats:'共 {videos} 个视频 | {withSubs} 个有字幕',loadFailed:'数据加载失败：{message}',
+    importAll:'全部导入',published:'发布时间',sortDefault:'默认顺序',sortTitle:'标题',sortDuration:'时长',sortPublished:'发布时间',stats:'共 {videos} 个视频 | {withSubs} 个有字幕',loadFailed:'数据加载失败：{message}',
     noRows:'没有找到视频。',unassignTitle:'解除绑定',uploadAssignTitle:'上传并绑定 SRT',
     selectFile:'请先选择文件。',srtOnly:'只能上传 SRT 文件。',uploading:'上传中...',uploadDone:'上传完成：{filename}',
     uploadAssignDone:'上传并绑定完成：{filename}',uploadFailed:'上传失败：{message}',confirmDetach:'确定解除 {lang} 字幕绑定吗？\n（文件不会被删除。）',
@@ -435,7 +425,7 @@ var UI_TEXT={
     assigning:'绑定中...',assigned:'已绑定 {count} 个文件。',allAssigned:'所有 SRT 文件都已绑定。',
     suggestions:'自动匹配建议（{count} 个）：',noSuggestions:'没有匹配建议：',assign:'绑定',
     assignedFile:'绑定完成：{filename}',scanningFailed:'扫描失败：{message}',syncing:'同步中...',syncDone:'YouTube 同步完成。',
-    syncFailed:'同步失败：{message}',
+    syncFailed:'同步失败：{message}',standardizeNames:'整理文件名',standardized:'已整理 {renamed} 个文件，跳过 {skipped} 个。',glossary:'术语库',logout:'退出登录',
     staticModeNotice:'⚠️ 当前运行在静态托管环境。管理功能（上传、绑定、同步）已禁用。请在本地运行 server.py 获取完整管理权限。',
     staticUploadDisabled:'静态托管中无法上传。',
     staticDetachDisabled:'静态托管中无法解除绑定。',
@@ -451,8 +441,9 @@ function setText(id,key){var el=document.getElementById(id);if(el)el.textContent
 function setPlaceholder(id,key){var el=document.getElementById(id);if(el)el.placeholder=t(key);}
 function applyUiText(){
   setText('pageTitle','pageTitle');setText('openAppLink','openApp');setPlaceholder('tableSearch','searchVideos');
-  setText('openUploadBtn','uploadSrt');setText('openBatchBtn','batchImport');setText('scanBtn','scan');setText('syncBtn','syncYoutube');
-  setText('scannerTitle','scannerTitle');setText('titleTh','title');setText('durationTh','duration');setText('subtitlesTh','subtitles');
+  setText('openUploadBtn','uploadSrt');setText('openBatchBtn','batchImport');setText('scanBtn','scan');setText('syncBtn','syncYoutube');setText('standardizeBtn','standardizeNames');setText('glossaryBtn','glossary');setText('logoutBtn','logout');
+  setText('scannerTitle','scannerTitle');setText('titleTh','title');setText('durationTh','duration');setText('publishedTh','published');setText('subtitlesTh','subtitles');
+  setText('sortDefault','sortDefault');setText('sortTitle','sortTitle');setText('sortDuration','sortDuration');setText('sortPublished','sortPublished');
   setText('uploadTitle','uploadTitle');setText('uploadFileLabel','selectSrt');setText('dropText','dropText');
   setText('uploadLangLabel','language');setText('uploadVideoLabel','assignVideo');setText('cancelUploadBtn','cancel');setText('uploadBtn','upload');
   setText('batchTitle','batchTitle');setText('batchHelp','batchHelp');setText('batchDropText','batchDropText');setText('batchDropHint','batchDropHint');
@@ -462,8 +453,10 @@ function applyUiText(){
 
 // ===== Load =====
 function loadData(){
-  api('GET','/api/mapping').then(function(d){
-    mapping=d;allVideos=d.videos;
+  Promise.all([api('GET','/api/mapping'),api('GET','/api/glossary'),api('GET','/api/admin/session')]).then(function(res){
+    mapping=res[0];allVideos=mapping.videos;glossary=res[1]||{terms:[]};
+    document.getElementById('adminAlias').textContent=res[2]&&res[2].alias?('Admin: '+res[2].alias):'';
+    renderGlossary();
     finishLoadData();
   }).catch(function(){
     // API unavailable — try static JSON (Cloudflare Pages fallback)
@@ -502,6 +495,38 @@ function applyStaticMode(){
 // ===== Render Table =====
 var langLabels={ko:'한국어',en:'English',ja:'日本語',zh:'中文'};
 var langOrder=['ko','en','ja','zh'];
+var currentSort='default',sortAsc=true;
+
+function formatDate(ts){
+  if(!ts)return'-';
+  var d=new Date(ts);
+  if(isNaN(d.getTime()))return'-';
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+
+function sortVideos(videos){
+  if(currentSort==='default')return videos;
+  var sorted=videos.slice();
+  if(currentSort==='title'){
+    sorted.sort(function(a,b){return a.title.localeCompare(b.title,'ko')});
+  }else if(currentSort==='duration'){
+    sorted.sort(function(a,b){return(a.duration||0)-(b.duration||0)});
+  }else if(currentSort==='published'){
+    sorted.sort(function(a,b){return(a.publishedAt||'').localeCompare(b.publishedAt||'')});
+  }
+  if(!sortAsc)sorted.reverse();
+  return sorted;
+}
+
+function updateSortHeaders(){
+  var headers=document.querySelectorAll('.video-table th.sortable');
+  for(var i=0;i<headers.length;i++){
+    var th=headers[i],key=th.dataset.sort;
+    th.classList.toggle('sorted',key===currentSort);
+    var arrow=th.querySelector('.sort-arrow');
+    if(arrow)arrow.textContent=key===currentSort?(sortAsc?' ▲':' ▼'):'';
+  }
+}
 
 function renderTable(filter){
   var tbody=document.getElementById('videoTableBody');
@@ -510,6 +535,8 @@ function renderTable(filter){
     var q=filter.toLowerCase();
     videos=videos.filter(function(v){return v.title.toLowerCase().indexOf(q)>=0||v.videoId.toLowerCase().indexOf(q)>=0});
   }
+  videos=sortVideos(videos);
+  updateSortHeaders();
   var html='';
   for(var i=0;i<videos.length;i++){
     var v=videos[i],subs=v.subtitles||{};
@@ -518,6 +545,7 @@ function renderTable(filter){
     html+='<td class="vid">'+esc(v.videoId)+'</td>';
     html+='<td class="title-cell" title="'+esc(v.title)+'">'+esc(v.title)+'</td>';
     html+='<td class="dur">'+(v.duration?formatDuration(v.duration):'-')+'</td>';
+    html+='<td class="pub">'+formatDate(v.publishedAt)+'</td>';
     html+='<td><div class="lang-slots">';
     for(var j=0;j<langOrder.length;j++){
       var lang=langOrder[j],fn=subs[lang];
@@ -538,7 +566,7 @@ function renderTable(filter){
     html+='</div></td>';
     html+='</tr>';
   }
-  tbody.innerHTML=html||'<tr><td colspan="5" style="text-align:center;color:var(--text-dim);padding:40px">'+t('noRows')+'</td></tr>';
+  tbody.innerHTML=html||'<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:40px">'+t('noRows')+'</td></tr>';
 }
 
 // ===== Upload =====
@@ -607,29 +635,29 @@ dz.addEventListener('drop',function(e){
   }else{toast(t('srtOnly'),'error')}
 });
 
-function doUpload(){
+function doUpload(overwrite){
   if(!uploadFileData){toast(t('selectFile'),'error');return}
   var lang=document.getElementById('uploadLang').value;
   var videoId=document.getElementById('uploadVideo').value;
   var form=new FormData();
   form.append('file',uploadFileData);
+  form.append('lang',lang);
+  if(videoId)form.append('videoId',videoId);
+  if(overwrite)form.append('overwrite','1');
 
   document.getElementById('uploadBtn').disabled=true;
   document.getElementById('uploadBtn').textContent=t('uploading');
 
   api('POST','/api/upload',form).then(function(r){
-    if(videoId&&lang){
-      // Assign to video
-      return api('POST','/api/assign',{videoId:videoId,lang:lang,filename:r.filename}).then(function(){
-        toast(t('uploadAssignDone',{filename:r.filename}),'success');
-      });
-    }else{
-      toast(t('uploadDone',{filename:r.filename}),'success');
-    }
-  }).then(function(){
+    toast((r.assigned?t('uploadAssignDone',{filename:r.filename}):t('uploadDone',{filename:r.filename})),'success');
     closeUploadModal();
     loadData();
   }).catch(function(e){
+    var info=e.details||{};
+    if(info.requiresOverwrite&&confirm('已有 '+info.lang.toUpperCase()+' 字幕：\n'+info.existingFile+'\n\n是否覆盖？')){
+      doUpload(true);
+      return;
+    }
     toast(t('uploadFailed',{message:e.message}),'error');
   }).finally(function(){
     document.getElementById('uploadBtn').disabled=false;
@@ -782,11 +810,66 @@ function runSync(event){
   var btn=event&&event.target?event.target:document.getElementById('syncBtn');
   btn.disabled=true;btn.textContent=t('syncing');
   api('POST','/api/sync').then(function(r){
-    if(r.ok){toast(t('syncDone'),'success');loadData();}
+    if(r.ok){
+      var summary='Videos: '+r.totalVideos+' | Published: '+r.publishedAtPopulated+' | Missing: '+r.publishedAtMissing;
+      document.getElementById('syncResult').style.display='block';
+      document.getElementById('syncResult').textContent=summary;
+      toast(t('syncDone')+' '+summary,'success');loadData();
+    }
     else{toast(t('syncFailed',{message:(r.error||r.output)}),'error')}
   }).catch(function(e){toast(t('syncFailed',{message:e.message}),'error')})
   .finally(function(){btn.disabled=false;btn.textContent=t('syncYoutube')});
 }
+
+function standardizeSubtitles(){
+  var btn=document.getElementById('standardizeBtn');
+  btn.disabled=true;
+  api('POST','/api/subtitles/standardize',{}).then(function(r){
+    toast(t('standardized',{renamed:r.renamed,skipped:r.skipped}),'success');
+    loadData();
+  }).catch(function(e){toast(t('failed',{message:e.message}),'error')})
+  .finally(function(){btn.disabled=false});
+}
+
+function toggleGlossaryPanel(){
+  var p=document.getElementById('glossaryPanel');
+  p.style.display=p.style.display==='none'?'block':'none';
+}
+function aliasesToText(values){return (values||[]).join(', ')}
+function textToAliases(text){return text.split(',').map(function(s){return s.trim()}).filter(function(s){return s})}
+function renderGlossary(){
+  var body=document.getElementById('glossaryBody');if(!body)return;
+  var terms=(glossary&&glossary.terms)||[],html='';
+  for(var i=0;i<terms.length;i++){
+    var a=terms[i].aliases||{};
+    html+='<tr data-i="'+i+'"><td><input value="'+esc(terms[i].label||'')+'"></td><td><input value="'+esc(aliasesToText(a.ko))+'"></td><td><input value="'+esc(aliasesToText(a.en))+'"></td><td><input value="'+esc(aliasesToText(a.ja))+'"></td><td><input value="'+esc(aliasesToText(a.zh))+'"></td><td><button class="btn btn-sm btn-danger" onclick="removeGlossaryRow('+i+')">x</button></td></tr>';
+  }
+  body.innerHTML=html;
+}
+function readGlossaryFromTable(){
+  var rows=document.querySelectorAll('#glossaryBody tr'),terms=[];
+  rows.forEach(function(row,i){
+    var inputs=row.querySelectorAll('input'),label=inputs[0].value.trim();
+    terms.push({id:label.toLowerCase().replace(/[^a-z0-9_-]+/g,'-')||('term-'+(i+1)),label:label,aliases:{ko:textToAliases(inputs[1].value),en:textToAliases(inputs[2].value),ja:textToAliases(inputs[3].value),zh:textToAliases(inputs[4].value)}});
+  });
+  return {terms:terms};
+}
+function addGlossaryRow(){
+  glossary=readGlossaryFromTable();
+  glossary.terms.push({id:'new-term',label:'',aliases:{ko:[],en:[],ja:[],zh:[]}});
+  renderGlossary();
+}
+function removeGlossaryRow(i){
+  glossary=readGlossaryFromTable();
+  glossary.terms.splice(i,1);
+  renderGlossary();
+}
+function saveGlossary(){
+  glossary=readGlossaryFromTable();
+  api('POST','/api/glossary',glossary).then(function(r){glossary=r.glossary;renderGlossary();toast('Glossary saved','success')})
+    .catch(function(e){toast(t('failed',{message:e.message}),'error')});
+}
+function logoutAdmin(){api('POST','/api/admin/logout',{}).then(function(){location.href='/admin'}).catch(function(){location.href='/admin'})}
 
 // ===== Helpers =====
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
@@ -804,6 +887,19 @@ function toast(msg,type){
 document.getElementById('tableSearch').addEventListener('input',function(){renderTable(this.value)});
 document.getElementById('uploadModal').addEventListener('click',function(e){if(e.target===this)closeUploadModal()});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeUploadModal()});
+// Sort select
+document.getElementById('sortSelect').addEventListener('change',function(){
+  currentSort=this.value;sortAsc=true;renderTable(document.getElementById('tableSearch').value);
+});
+// Sortable column headers
+document.querySelectorAll('.video-table th.sortable').forEach(function(th){
+  th.addEventListener('click',function(){
+    var key=this.dataset.sort;
+    if(currentSort===key){sortAsc=!sortAsc}else{currentSort=key;sortAsc=true}
+    document.getElementById('sortSelect').value=currentSort;
+    renderTable(document.getElementById('tableSearch').value);
+  });
+});
 
 // ===== Init =====
 applyUiText();
