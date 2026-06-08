@@ -9,6 +9,9 @@ __pycache__/
 # Server-side cache (not needed for deployment)
 data/
 
+# Generated static export
+dist/
+
 # Local data files (not needed for deployment)
 youtube-*.csv
 MEUDIO.TXT

@@ -1,11 +1,42 @@
 {
   "videos": [
     {
+      "videoId": "mTsp2nFWznI",
+      "videoUrl": "https://www.youtube.com/watch?v=mTsp2nFWznI",
+      "youtubeUrl": "https://www.youtube.com/watch?v=mTsp2nFWznI",
+      "title": "⚽ 선배미 낭낭한 축구부 뮤 좋네요 🥅 축구장으로 집합 🖤🩷🩵💜💚 | Soccer Club MEU #MWMEU_LIVE",
+      "duration": 0,
+      "thumbnailUrl": "https://i.ytimg.com/vi/mTsp2nFWznI/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCPhIulFm5lxrkjWZ5-Q-jv20Y2Tw",
+      "liveStatus": "",
+      "publishedAt": "2026-06-07",
+      "subtitles": {}
+    },
+    {
+      "videoId": "BlmiC-lgi1E",
+      "videoUrl": "https://www.youtube.com/watch?v=BlmiC-lgi1E",
+      "youtubeUrl": "https://www.youtube.com/watch?v=BlmiC-lgi1E",
+      "title": "세상에서 제일 귀여운 고양이는 누구? 🤟 양세찬 게임 & 애교 대결 🖤🩷🩵💜💚 | Cuteness Battle #MWMEU_LIVE",
+      "duration": 6473,
+      "thumbnailUrl": "https://i.ytimg.com/vi/BlmiC-lgi1E/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDiy8SAhy7FTIxl07MONWkUPyG_Yw",
+      "liveStatus": "",
+      "publishedAt": "2026-06-07",
+      "subtitles": {},
+      "bilibiliUrl": "https://www.bilibili.com/video/BV1GfVd67Eqq",
+      "bilibiliSubtitleOffset": 38,
+      "sources": {
+        "bilibili": {
+          "url": "https://www.bilibili.com/video/BV1GfVd67Eqq",
+          "subtitleOffset": 38
+        }
+      }
+    },
+    {
       "videoId": "75A76ZI6Syw",
       "videoUrl": "https://www.youtube.com/watch?v=75A76ZI6Syw",
+      "youtubeUrl": "https://www.youtube.com/watch?v=75A76ZI6Syw",
       "title": "난 우울하지 않아도 힙합을 춰 🍓 오늘 생일자 이비, 등장! 🩷 | IVI’s Birthday Party #MWMEU_LIVE",
       "duration": 0,
-      "thumbnailUrl": "https://i.ytimg.com/vi/75A76ZI6Syw/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB1uiHykHHIVV4ym6bHj72u9KK8hg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/75A76ZI6Syw/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLC65ZDkCmyxT4MZkCHK4xZx4_jAlQ",
       "liveStatus": "",
       "publishedAt": "2026-06-08",
       "subtitles": {}
@@ -13,56 +44,64 @@
     {
       "videoId": "CHCwjMfkb-I",
       "videoUrl": "https://www.youtube.com/watch?v=CHCwjMfkb-I",
+      "youtubeUrl": "https://www.youtube.com/watch?v=CHCwjMfkb-I",
       "title": "MEU:DIO Ep.1 📻 대문자 T 두 명의 고민 상담소 🩷🩵 | MW:MEU RADIO w. IVI & SUA #MWMEU_LIVE",
       "duration": 7861,
-      "thumbnailUrl": "https://i.ytimg.com/vi/CHCwjMfkb-I/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCPcB8XD49Rt-93dAB5igiJuhToWA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/CHCwjMfkb-I/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBqvA_eUsSfvc4uLgMphSksjqdm1A",
       "liveStatus": "",
       "publishedAt": "2026-06-03",
       "subtitles": {
         "ko": "subtitles/[ko-CHCwjMfkb-I] MEU_DIO Ep.1 📻 대문자 T 두 명의 고민 상담소 🩷🩵 _ MW_MEU RADIO w. IVI & SUA #MWMEU_LIVE.srt",
         "zh": "subtitles/[zh-CHCwjMfkb-I] MEU_DIO Ep.1 📻 대문자 T 두 명의 고민 상담소 🩷🩵 _ MW_MEU RADIO w. IVI & SUA #MWMEU_LIVE.srt"
+      },
+      "bilibiliUrl": "https://www.bilibili.com/video/BV1pzEF6HES2/",
+      "bilibiliSubtitleOffset": 36,
+      "sources": {
+        "bilibili": {
+          "url": "https://www.bilibili.com/video/BV1pzEF6HES2/",
+          "subtitleOffset": 36
+        }
       }
-    },
-    {
-      "videoId": "BlmiC-lgi1E",
-      "videoUrl": "https://www.youtube.com/watch?v=BlmiC-lgi1E",
-      "title": "세상에서 제일 귀여운 고양이는 누구? 🤟 귀여움 논쟁 & 양세찬 게임 🖤🩷🩵💜💚 | Cute Debate #MWMEU_LIVE",
-      "duration": 0,
-      "thumbnailUrl": "https://i.ytimg.com/vi/BlmiC-lgi1E/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBBhGISng363FBTHHIwM_Pi80ohxw",
-      "liveStatus": "",
-      "publishedAt": "2026-06-07",
-      "subtitles": {}
     },
     {
       "videoId": "QcSeTgaEFkY",
       "videoUrl": "https://www.youtube.com/watch?v=QcSeTgaEFkY",
+      "youtubeUrl": "https://www.youtube.com/watch?v=QcSeTgaEFkY",
       "title": "오늘 밤은 뮤멍 어때요? 🏕️🌙 뮤의 힐링 골골송 zZ 🖤🩷🩵💜💚 | MEU’s Camping Night #MWMEU_LIVE",
       "duration": 7162,
-      "thumbnailUrl": "https://i.ytimg.com/vi/QcSeTgaEFkY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDGxCvGLIJ7HRn-Vaiaz1XpSOIwZQ",
+      "thumbnailUrl": "https://i.ytimg.com/vi/QcSeTgaEFkY/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLB8S4mjxWTTL02y0vbF2TiDP2fDmg",
       "liveStatus": "",
       "publishedAt": "2026-05-31",
       "subtitles": {
         "ko": "subtitles/[ko-QcSeTgaEFkY] 오늘 밤은 뮤멍 어때요_ 🏕️🌙 뮤의 힐링 골골송 zZ 🖤🩷🩵💜💚 _ MEU’s Camping Night #MWMEU_LIVE.srt"
+      },
+      "bilibiliUrl": "https://www.bilibili.com/video/BV1g2VV6xEVs",
+      "sources": {
+        "bilibili": {
+          "url": "https://www.bilibili.com/video/BV1g2VV6xEVs"
+        }
       }
     },
     {
       "videoId": "OydrDV0UiDw",
       "videoUrl": "https://www.youtube.com/watch?v=OydrDV0UiDw",
+      "youtubeUrl": "https://www.youtube.com/watch?v=OydrDV0UiDw",
       "title": "🍳 설거지는 누가할래? 🧑🏻‍🍳 리츠의 신입 땡글즈 오버쿡드 참교육 🩷💜💚 | IVI & RITZ & CHOEUN’s Overcooked #MWMEU_LIVE",
       "duration": 7440,
-      "thumbnailUrl": "https://i.ytimg.com/vi/OydrDV0UiDw/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBVCK4ux7SZI0kCTzBwBMOhouh_jw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/OydrDV0UiDw/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDkca0e6gUlTf6ri2DHL0hOkahKQg",
       "liveStatus": "",
       "publishedAt": "2026-05-29",
       "subtitles": {
-        "ko": "subtitles/[ko-OydrDV0UiDw] 🍳 설거지는 누가할래_ 🧑🏻‍🍳 리츠의 신입 땡글즈 오버쿡드 참교육 🩷💜💚 _ IVI & RITZ & CHOEUN’s Overcooked #MWMEU_LIVE_1.srt"
+        "ko": "subtitles/[ko-OydrDV0UiDw] 🍳 설거지는 누가할래_ 🧑🏻‍🍳 리츠의 신입 땡글즈 오버쿡드 참교육 🩷💜💚 _ IVI & RITZ & CHOEUN’s Overcooked #MWMEU_LIVE.srt"
       }
     },
     {
       "videoId": "DhZO6nWeMiE",
       "videoUrl": "https://www.youtube.com/watch?v=DhZO6nWeMiE",
+      "youtubeUrl": "https://www.youtube.com/watch?v=DhZO6nWeMiE",
       "title": "✈️🧳 뮤의 첫 단체 해외여행에서 생긴 일 🖤🩷🩵💜💚 | First Group Trip Behind #MWMEU_LIVE",
       "duration": 6784,
-      "thumbnailUrl": "https://i.ytimg.com/vi/DhZO6nWeMiE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBxb23u1y8hJg71HBCd12R0Ep_BMA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/DhZO6nWeMiE/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCVjxo_Y6R-MrMiZQHLzl2GqeU49w",
       "liveStatus": "",
       "publishedAt": "2026-05-24",
       "subtitles": {
@@ -72,9 +111,10 @@
     {
       "videoId": "rRe4Zo__J5o",
       "videoUrl": "https://www.youtube.com/watch?v=rRe4Zo__J5o",
+      "youtubeUrl": "https://www.youtube.com/watch?v=rRe4Zo__J5o",
       "title": "MEU:DIO Ep.0 📻 DJ 지한과 게스트 수아의 첫 라디오 🐵 뮤 : 더 비기닝 🖤🩵 | MW:MEU RADIO #MWMEU_LIVE",
       "duration": 7074,
-      "thumbnailUrl": "https://i.ytimg.com/vi/rRe4Zo__J5o/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDJZm5oGwlrpR2K3-rfe6T_B1LoIg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/rRe4Zo__J5o/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLC7dcRAm0Rzqq4LCREZSqMJEkeuxg",
       "liveStatus": "",
       "publishedAt": "2026-05-20",
       "subtitles": {
@@ -84,9 +124,10 @@
     {
       "videoId": "swtX7LnkknY",
       "videoUrl": "https://www.youtube.com/watch?v=swtX7LnkknY",
+      "youtubeUrl": "https://www.youtube.com/watch?v=swtX7LnkknY",
       "title": "앨리스 세계로 떨어진 뮤? ♥️♠️♦️♣️ 뮤 in 원더랜드 🖤🩷🩵💜💚 | MEU in Wonderland #MWMEU_LIVE",
       "duration": 5829,
-      "thumbnailUrl": "https://i.ytimg.com/vi/swtX7LnkknY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCFt0jT1_zH7P3C65pIu-PSJPxd3Q",
+      "thumbnailUrl": "https://i.ytimg.com/vi/swtX7LnkknY/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBySFjZP030ud56etVEzZk2ihfvAA",
       "liveStatus": "",
       "publishedAt": "2026-05-10",
       "subtitles": {
@@ -96,9 +137,10 @@
     {
       "videoId": "0r0kwB3yzQ0",
       "videoUrl": "https://www.youtube.com/watch?v=0r0kwB3yzQ0",
+      "youtubeUrl": "https://www.youtube.com/watch?v=0r0kwB3yzQ0",
       "title": "👼 육아 난이도 극악? 어린이날 특집 🐥 뮤는 못말려 🖤🩷🩵💜💚 | Children’s Day Special #MWMEU_LIVE",
       "duration": 6204,
-      "thumbnailUrl": "https://i.ytimg.com/vi/0r0kwB3yzQ0/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDcsEvcnIt02m8vxItcYeFSfy2oQg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/0r0kwB3yzQ0/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDppgPFePrEexEgllpyw61b0g7yjg",
       "liveStatus": "",
       "publishedAt": "2026-05-06",
       "subtitles": {
@@ -108,9 +150,10 @@
     {
       "videoId": "ztMmEFkOWCU",
       "videoUrl": "https://www.youtube.com/watch?v=ztMmEFkOWCU",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ztMmEFkOWCU",
       "title": "🥕 절대 당근을 맡겨선 안돼! 🐰 이비X초은 슈퍼 버니맨 🩷💚 | IVI & CHOEUN Super Bunny Man",
       "duration": 7271,
-      "thumbnailUrl": "https://i.ytimg.com/vi/ztMmEFkOWCU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA8eShBwjkRfA8iHNZ79llyNcSxmw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ztMmEFkOWCU/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLAn3AhsrvnwsGBdks__fSsIOvF8jA",
       "liveStatus": "",
       "publishedAt": "2026-04-29",
       "subtitles": {
@@ -120,9 +163,10 @@
     {
       "videoId": "CuYWNbBnFWw",
       "videoUrl": "https://www.youtube.com/watch?v=CuYWNbBnFWw",
+      "youtubeUrl": "https://www.youtube.com/watch?v=CuYWNbBnFWw",
       "title": "지금부터가 반전! 🎂 뮤의 의젓 막내 초은이의 생일 파티에 초대합니다 💚 | CHOEUN’s Birthday Party",
       "duration": 7887,
-      "thumbnailUrl": "https://i.ytimg.com/vi/CuYWNbBnFWw/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCFHMM06AyaGxSGa6MP7NnhN3X-4w",
+      "thumbnailUrl": "https://i.ytimg.com/vi/CuYWNbBnFWw/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLD8gJi3hSKbZH21sjzvqD2XMhR5WQ",
       "liveStatus": "",
       "publishedAt": "2026-04-26",
       "subtitles": {
@@ -132,9 +176,10 @@
     {
       "videoId": "hPfgqT7tqBE",
       "videoUrl": "https://www.youtube.com/watch?v=hPfgqT7tqBE",
+      "youtubeUrl": "https://www.youtube.com/watch?v=hPfgqT7tqBE",
       "title": "🚀 우리 이제 진짜 아이돌이야!! 뮤 출격 완료 🐈 쇼케이스 후기 라이브 🖤🩷🩵💜💚 | Showcase Recap Live",
       "duration": 8956,
-      "thumbnailUrl": "https://i.ytimg.com/vi/hPfgqT7tqBE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAxJ5AB9e_SdlM41qdDtjMKF2SdKg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/hPfgqT7tqBE/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLArfdn4-H6BSxZjZwnl9yBYYvU7FQ",
       "liveStatus": "",
       "publishedAt": "2026-04-22",
       "subtitles": {
@@ -144,9 +189,10 @@
     {
       "videoId": "rOaByWv3VtM",
       "videoUrl": "https://www.youtube.com/watch?v=rOaByWv3VtM",
+      "youtubeUrl": "https://www.youtube.com/watch?v=rOaByWv3VtM",
       "title": "(경) 두근두근 데뷔 전야제 (축) 🎉 우리 뮤 이제 데뷔하니까 댓글 예쁘게 써줘 🖤🩷🩵💜💚 | Debut Eve #MWMEU_LIVE",
       "duration": 8347,
-      "thumbnailUrl": "https://i.ytimg.com/vi/rOaByWv3VtM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA202LmI32ukjlDZFKv13X0IYbyWA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/rOaByWv3VtM/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDLzdpJ4edwdrnZp8iIZnwk_9twew",
       "liveStatus": "",
       "publishedAt": "2026-04-05",
       "subtitles": {
@@ -156,9 +202,10 @@
     {
       "videoId": "SjWPe7zRU3Q",
       "videoUrl": "https://www.youtube.com/watch?v=SjWPe7zRU3Q",
+      "youtubeUrl": "https://www.youtube.com/watch?v=SjWPe7zRU3Q",
       "title": "떨어지는 벚꽃잎을 잡으면 사랑이 이루어진대🌸🍡뮤와 벚꽃놀이 소풍 🖤🩷🩵💜💚 | Cherry Blossom Picnic #MWMEU_LIVE",
       "duration": 7065,
-      "thumbnailUrl": "https://i.ytimg.com/vi/SjWPe7zRU3Q/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBifQhFjn_xelH4-H5xVmDR2Z2d3w",
+      "thumbnailUrl": "https://i.ytimg.com/vi/SjWPe7zRU3Q/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLAtxDuRW3Oc73B7lMBO3z4wXwb6lQ",
       "liveStatus": "",
       "publishedAt": "2026-03-29",
       "subtitles": {
@@ -168,9 +215,10 @@
     {
       "videoId": "L1hLA1FCaxE",
       "videoUrl": "https://www.youtube.com/watch?v=L1hLA1FCaxE",
+      "youtubeUrl": "https://www.youtube.com/watch?v=L1hLA1FCaxE",
       "title": "👻1겁쟁이와 그저 특별수당에만 관심있는 4감시원💸 #일본사고물건감시협회 🖤🩷🩵💜💚 | #JSP2 Horror Game Challenge #MWMEU_LIVE",
       "duration": 7410,
-      "thumbnailUrl": "https://i.ytimg.com/vi/L1hLA1FCaxE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCcgdVmOwDMCQ8glM44GwERKO_CWw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/L1hLA1FCaxE/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDYr1WVGzR03pvtNUAQn0CSiJ9U7w",
       "liveStatus": "",
       "publishedAt": "2026-03-22",
       "subtitles": {
@@ -180,9 +228,10 @@
     {
       "videoId": "-nGydzUsTfM",
       "videoUrl": "https://www.youtube.com/watch?v=-nGydzUsTfM",
+      "youtubeUrl": "https://www.youtube.com/watch?v=-nGydzUsTfM",
       "title": "🍬 사탕 먹는 거 빼고 다하는 🍭 우당탕탕 화이트데이 대작전 🖤🩷🩵💜💚 | The Chaotic White Day Mission #MWMEU_LIVE",
       "duration": 5824,
-      "thumbnailUrl": "https://i.ytimg.com/vi/-nGydzUsTfM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBHIu5t740aycUmKbBODDOH0wJT3A",
+      "thumbnailUrl": "https://i.ytimg.com/vi/-nGydzUsTfM/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCbBJ-OSpmNlAxPPCYTQAdl_-es_w",
       "liveStatus": "",
       "publishedAt": "2026-03-15",
       "subtitles": {
@@ -192,9 +241,10 @@
     {
       "videoId": "dOAmYhu2ZSs",
       "videoUrl": "https://www.youtube.com/watch?v=dOAmYhu2ZSs",
+      "youtubeUrl": "https://www.youtube.com/watch?v=dOAmYhu2ZSs",
       "title": "초대장 💌 공주님 하니하니지한 왕자님👑의 생일 파티에 가실 시간입니다 🎂🖤 | Z-HAN's Birthday Party #MWMEU_LIVE",
       "duration": 6551,
-      "thumbnailUrl": "https://i.ytimg.com/vi/dOAmYhu2ZSs/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCqID4EJEYlawpEVS4XSoZs_u030w",
+      "thumbnailUrl": "https://i.ytimg.com/vi/dOAmYhu2ZSs/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDorcNq1Ck8htVy0k_vkx40b20Gvw",
       "liveStatus": "",
       "publishedAt": "2026-03-11",
       "subtitles": {
@@ -205,9 +255,10 @@
     {
       "videoId": "1MWRDbiDLAw",
       "videoUrl": "https://www.youtube.com/watch?v=1MWRDbiDLAw",
+      "youtubeUrl": "https://www.youtube.com/watch?v=1MWRDbiDLAw",
       "title": "💊환자분, 약 드실 시간이에요 🏥 이비의 ‘이비인후과’ 🩺 🖤🩷🩵💜💚 | Welcome to IVI’s Clinic #MWMEU_LIVE",
       "duration": 7475,
-      "thumbnailUrl": "https://i.ytimg.com/vi/1MWRDbiDLAw/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCI-RkuelDOnNPmt-K8wU0ptb8V8g",
+      "thumbnailUrl": "https://i.ytimg.com/vi/1MWRDbiDLAw/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLB-e3IRf_7OYd4bUNf1X7yVaqV6DA",
       "liveStatus": "",
       "publishedAt": "2026-03-08",
       "subtitles": {
@@ -217,9 +268,10 @@
     {
       "videoId": "qhWRImd9vXE",
       "videoUrl": "https://www.youtube.com/watch?v=qhWRImd9vXE",
+      "youtubeUrl": "https://www.youtube.com/watch?v=qhWRImd9vXE",
       "title": "🛎️2026 신입생 오리엔테이션 안내🎓 첫 OT는 무조건 필참입니다! 🖤🩵💜💚 | MEU 2026 Orientation Day #MEU_LIVE",
       "duration": 7000,
-      "thumbnailUrl": "https://i.ytimg.com/vi/qhWRImd9vXE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBBHCUc6gTT8-KL-NAJVScB5h_49A",
+      "thumbnailUrl": "https://i.ytimg.com/vi/qhWRImd9vXE/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCCAahVO_6ytaDFbDI9p0Q8R772fA",
       "liveStatus": "",
       "publishedAt": "2026-03-07",
       "subtitles": {
@@ -230,9 +282,10 @@
     {
       "videoId": "NDV80QnWkAs",
       "videoUrl": "https://www.youtube.com/watch?v=NDV80QnWkAs",
+      "youtubeUrl": "https://www.youtube.com/watch?v=NDV80QnWkAs",
       "title": "소녀들이 왜 이리 무해해🫶 언니라인의 소소한 수다&노래방 타임🖤🩷🩵 | Unnie Line Surprise Talk Live #MEU_LIVE",
       "duration": 7842,
-      "thumbnailUrl": "https://i.ytimg.com/vi/NDV80QnWkAs/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDt6BcdpqQpg_yXQ8N7vKczM4MQ7A",
+      "thumbnailUrl": "https://i.ytimg.com/vi/NDV80QnWkAs/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCsOnynEm4RNpkUJ4Zx25uRBkqe3Q",
       "liveStatus": "",
       "publishedAt": "2026-02-25",
       "subtitles": {
@@ -242,9 +295,10 @@
     {
       "videoId": "Hn_E9h50tnE",
       "videoUrl": "https://www.youtube.com/watch?v=Hn_E9h50tnE",
+      "youtubeUrl": "https://www.youtube.com/watch?v=Hn_E9h50tnE",
       "title": "🎊명절엔 입조심! 🧧끝나지 않는 설맞이 훈민정음 윷놀이 대결 🖤🩷🩵💜💚 | Happy Seollal with MEU family #MEU_LIVE",
       "duration": 6068,
-      "thumbnailUrl": "https://i.ytimg.com/vi/Hn_E9h50tnE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDHfKBr_ZEna930zlVGFnlJL5NS1Q",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Hn_E9h50tnE/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLA6miKsLpIw125stSEQEkOwd08e2Q",
       "liveStatus": "",
       "publishedAt": "2026-02-15",
       "subtitles": {
@@ -254,9 +308,10 @@
     {
       "videoId": "lHV3za4mR6E",
       "videoUrl": "https://www.youtube.com/watch?v=lHV3za4mR6E",
+      "youtubeUrl": "https://www.youtube.com/watch?v=lHV3za4mR6E",
       "title": "❄⛸️🥌아이스링크장으로 집합! 🏅뮤의 동계 올림픽 🖤🩷🩵💜💚 | MEU’s Winter Olympics #MEU_LIVE",
       "duration": 5290,
-      "thumbnailUrl": "https://i.ytimg.com/vi/lHV3za4mR6E/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAfb_-ri2R1bUKPofd8J1UL4-UOYQ",
+      "thumbnailUrl": "https://i.ytimg.com/vi/lHV3za4mR6E/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLC2Wl79PlMsGGf_4oYEspJNbKO6Pw",
       "liveStatus": "",
       "publishedAt": "2026-02-08",
       "subtitles": {
@@ -266,9 +321,10 @@
     {
       "videoId": "ag5sBqM-iJI",
       "videoUrl": "https://www.youtube.com/watch?v=ag5sBqM-iJI",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ag5sBqM-iJI",
       "title": "✏️꿀팁 : 누군지 못 알아보겠으면 옆에 이름만 적으면 된대! 🎨뮤의 미술시간🖤🩷🩵💜💚 | MEU’s Drawing Time  #MEU_LIVE",
       "duration": 7290,
-      "thumbnailUrl": "https://i.ytimg.com/vi/ag5sBqM-iJI/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDSSbrw-dAbspYb70LOFTbnqBdIqA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ag5sBqM-iJI/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLC7X3YG8xqt0o0rdzMyhEZXEKDteA",
       "liveStatus": "",
       "publishedAt": "2026-02-01",
       "subtitles": {
@@ -278,9 +334,10 @@
     {
       "videoId": "QaW0K9nKO_o",
       "videoUrl": "https://www.youtube.com/watch?v=QaW0K9nKO_o",
+      "youtubeUrl": "https://www.youtube.com/watch?v=QaW0K9nKO_o",
       "title": "까불지 말고 자라~☝️ 리얼 숙면 유도 ASMR 🎧💤 🖤🩷💜 | Real Relaxing ASMR #MEU_LIVE",
       "duration": 5471,
-      "thumbnailUrl": "https://i.ytimg.com/vi/QaW0K9nKO_o/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBxSH26Z4CLZFqIN7tU17qF04otUw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/QaW0K9nKO_o/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBAeujdUfQCV8-Qv3H_D5NWWI4X0g",
       "liveStatus": "",
       "publishedAt": "2026-01-25",
       "subtitles": {
@@ -290,9 +347,10 @@
     {
       "videoId": "hCZkzCuzfz0",
       "videoUrl": "https://www.youtube.com/watch?v=hCZkzCuzfz0",
+      "youtubeUrl": "https://www.youtube.com/watch?v=hCZkzCuzfz0",
       "title": "💀외국어 못 하면 죽는 병 걸림🗣️🔒한국어 봉인 마을 생존기 🖤🩷🩵💜💚 | No Korean Challenge #MEU_LIVE",
       "duration": 6131,
-      "thumbnailUrl": "https://i.ytimg.com/vi/hCZkzCuzfz0/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDJZn-dNCfksLLvQqJfOPz4FGUQhQ",
+      "thumbnailUrl": "https://i.ytimg.com/vi/hCZkzCuzfz0/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBqNrRtSSFxpVKESb-fe9hRL7IFag",
       "liveStatus": "",
       "publishedAt": "2026-01-18",
       "subtitles": {
@@ -302,9 +360,10 @@
     {
       "videoId": "73ObMikEq-Y",
       "videoUrl": "https://www.youtube.com/watch?v=73ObMikEq-Y",
+      "youtubeUrl": "https://www.youtube.com/watch?v=73ObMikEq-Y",
       "title": "🎳훈수 금지! 팀 볼트스파이크⚡vs 꿍🕳 뮤배 볼링 대회 🖤🩷🩵💜💚 | MEU Bowling Cup #MEU_LIVE",
       "duration": 5387,
-      "thumbnailUrl": "https://i.ytimg.com/vi/73ObMikEq-Y/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB1Fn9ArBOqOn1APmwhnjCA9SKmuw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/73ObMikEq-Y/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCw6DDQHsk4a0FhlZS2LU_aLJdY2g",
       "liveStatus": "",
       "publishedAt": "2026-01-11",
       "subtitles": {
@@ -314,9 +373,10 @@
     {
       "videoId": "TNgx-DL0x2Y",
       "videoUrl": "https://www.youtube.com/watch?v=TNgx-DL0x2Y",
+      "youtubeUrl": "https://www.youtube.com/watch?v=TNgx-DL0x2Y",
       "title": "어차피 우승은 리츠? ⚔️ 만년 2등 지한의 반란! 🎮미니게임 대결 🖤💜 | Z-HAN vs RITZ Mini Games",
       "duration": 7363,
-      "thumbnailUrl": "https://i.ytimg.com/vi/TNgx-DL0x2Y/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCouVCNd0NekPNlO0AySrd1aufVQA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/TNgx-DL0x2Y/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBP4KUcirkD1M8XsiKpd-ExU0wuDg",
       "liveStatus": "",
       "publishedAt": "2026-01-07",
       "subtitles": {
@@ -327,9 +387,10 @@
     {
       "videoId": "KO0QhRmIjts",
       "videoUrl": "https://www.youtube.com/watch?v=KO0QhRmIjts",
+      "youtubeUrl": "https://www.youtube.com/watch?v=KO0QhRmIjts",
       "title": "🎯원래 목표는 크게 갖는 거라고 배웠습니다 ✍️서로의 새해 목표 정해주기 🖤🩷💜💚 | New Year with MEU  #MEU_LIVE",
       "duration": 6026,
-      "thumbnailUrl": "https://i.ytimg.com/vi/KO0QhRmIjts/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBPG4ygsigIKjv50ajS2C8-KjoCyA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/KO0QhRmIjts/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLAdvspkY8G9sGOlZ7zQKcHiW9IrvQ",
       "liveStatus": "",
       "publishedAt": "2026-01-04",
       "subtitles": {
@@ -339,9 +400,10 @@
     {
       "videoId": "-7H732GBZbU",
       "videoUrl": "https://www.youtube.com/watch?v=-7H732GBZbU",
+      "youtubeUrl": "https://www.youtube.com/watch?v=-7H732GBZbU",
       "title": "연말연시 회식 주인공 되는 방법이 궁금해? 🎤노래방 & 🔔새해 카운트다운 🖤🩷🩵💜💚 | Karaoke & Countdown #MEU_LIVE",
       "duration": 7633,
-      "thumbnailUrl": "https://i.ytimg.com/vi/-7H732GBZbU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLA02Mra6wpyuJzMhIXFsM6oGxvtrg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/-7H732GBZbU/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLB4wSKxljEgBK28kim58VoebDG3ag",
       "liveStatus": "",
       "publishedAt": "2025-12-31",
       "subtitles": {
@@ -351,9 +413,10 @@
     {
       "videoId": "ICc7GuZ_JdY",
       "videoUrl": "https://www.youtube.com/watch?v=ICc7GuZ_JdY",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ICc7GuZ_JdY",
       "title": "🕵️‍♂️고도로 발달한 마피아는 관종과 다를 바 없다🌙뮤의 파자마 파티 🖤🩷🩵💜💚 | MEU’s Pajama Party #MEU_LIVE",
       "duration": 8208,
-      "thumbnailUrl": "https://i.ytimg.com/vi/ICc7GuZ_JdY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCaIyDSr7QOYl-U_P4I0bRkZCuYtw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ICc7GuZ_JdY/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBUxyFlSLXrsvtRmm-RrNHWaORRxg",
       "liveStatus": "",
       "publishedAt": "2025-12-28",
       "subtitles": {
@@ -363,9 +426,10 @@
     {
       "videoId": "Z3t-biu9roY",
       "videoUrl": "https://www.youtube.com/watch?v=Z3t-biu9roY",
+      "youtubeUrl": "https://www.youtube.com/watch?v=Z3t-biu9roY",
       "title": "🎅최고의 크리스마스 보내는 방법🎄🌟뮤와 함께 트.꾸 🖤🩷🩵💜💚 | All I want for Christmas is MEU #MEU_LIVE",
       "duration": 6734,
-      "thumbnailUrl": "https://i.ytimg.com/vi/Z3t-biu9roY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCM8_Vl5afnFZwbGBrkEoK9W9u5OA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/Z3t-biu9roY/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLAYTNo25wGj4ROvhDeWZ6taORyI3Q",
       "liveStatus": "",
       "publishedAt": "2025-12-24",
       "subtitles": {
@@ -375,9 +439,10 @@
     {
       "videoId": "54lhqXHhx4Y",
       "videoUrl": "https://www.youtube.com/watch?v=54lhqXHhx4Y",
+      "youtubeUrl": "https://www.youtube.com/watch?v=54lhqXHhx4Y",
       "title": "우리 같이 눈사람☃️ 만들러 갈래?❄️흰 눈 사이 뮤 🖤🩷🩵💜💚 | MEU in the Snow #MEU_LIVE",
       "duration": 6571,
-      "thumbnailUrl": "https://i.ytimg.com/vi/54lhqXHhx4Y/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAFScp9WNVhlKgaHCveYxKAhE_i0A",
+      "thumbnailUrl": "https://i.ytimg.com/vi/54lhqXHhx4Y/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCm0D-VlORH6MVrdWMAFdgM35-g6A",
       "liveStatus": "",
       "publishedAt": "2025-12-19",
       "subtitles": {
@@ -387,9 +452,10 @@
     {
       "videoId": "KNEAO7LMRpc",
       "videoUrl": "https://www.youtube.com/watch?v=KNEAO7LMRpc",
+      "youtubeUrl": "https://www.youtube.com/watch?v=KNEAO7LMRpc",
       "title": "🍠직접 먹어보고 줏대있게 판단해🔥 맏막즈의 겨울 간식 월드컵🖤💚 | Z-HAN & CHOEUN’s Winter Snack World Cup",
       "duration": 7328,
-      "thumbnailUrl": "https://i.ytimg.com/vi/KNEAO7LMRpc/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLB7iDdve-pW_aC8wIb_0pCaMmc6Sw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/KNEAO7LMRpc/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDnhDPVr3KQbSMHvmLii5_EHPx-8w",
       "liveStatus": "",
       "publishedAt": "2025-12-17",
       "subtitles": {
@@ -399,9 +465,10 @@
     {
       "videoId": "E6Nen4RT36A",
       "videoUrl": "https://www.youtube.com/watch?v=E6Nen4RT36A",
+      "youtubeUrl": "https://www.youtube.com/watch?v=E6Nen4RT36A",
       "title": "(๑•̀ㅂ•́)و✧승부욕이 육체를 지배하면 생기는 일 🦾피지컬 뮤 🖤🩷🩵💜💚 | Physical MEU #MEU_LIVE",
       "duration": 6377,
-      "thumbnailUrl": "https://i.ytimg.com/vi/E6Nen4RT36A/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBMQN2NjJACRp2vq80ZfVA6sXn8SA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/E6Nen4RT36A/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCPneJgtbvG2039EyGtdJzXm_Gx3g",
       "liveStatus": "",
       "publishedAt": "2025-12-14",
       "subtitles": {
@@ -411,9 +478,10 @@
     {
       "videoId": "ZVRjtjsOE5Q",
       "videoUrl": "https://www.youtube.com/watch?v=ZVRjtjsOE5Q",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ZVRjtjsOE5Q",
       "title": "🪫오늘의 목표: 막내라인 체력 0 만들기 💃🏻저스트 댄스🕺🏻| 💜💚RITZ & CHOEUN’s Just Dance",
       "duration": 7019,
-      "thumbnailUrl": "https://i.ytimg.com/vi/ZVRjtjsOE5Q/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCZJJK-JdUIGH14ZDG95j0NMyjGOg",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ZVRjtjsOE5Q/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBjMeejVoD2KT_vL0djDnDbiVuOoA",
       "liveStatus": "",
       "publishedAt": "2025-12-10",
       "subtitles": {
@@ -423,9 +491,10 @@
     {
       "videoId": "PML6gycSunM",
       "videoUrl": "https://www.youtube.com/watch?v=PML6gycSunM",
+      "youtubeUrl": "https://www.youtube.com/watch?v=PML6gycSunM",
       "title": "지금부터가 반전! 최후의 1인은? 🧠 MEU의 퀴즈쇼 🖤🩷🩵💜💚 | MEU QUIZ SHOW #MEU_LIVE",
       "duration": 9034,
-      "thumbnailUrl": "https://i.ytimg.com/vi/PML6gycSunM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDZdWomUxq_MRX1B7XGoID6Z55USw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/PML6gycSunM/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCk5EKwzziJ6Nr0Q2-_kHsiXwyIfg",
       "liveStatus": "",
       "publishedAt": "2025-12-07",
       "subtitles": {
@@ -435,9 +504,10 @@
     {
       "videoId": "90o8R8YgHzk",
       "videoUrl": "https://www.youtube.com/watch?v=90o8R8YgHzk",
+      "youtubeUrl": "https://www.youtube.com/watch?v=90o8R8YgHzk",
       "title": "😤퉁퉁이 성대모사하는 아이돌 실존! 대환장 목소리로 동물원 만들기🩵💜 | #MyVoiceZoo Game Stream #MEU_LIVE",
       "duration": 7416,
-      "thumbnailUrl": "https://i.ytimg.com/vi/90o8R8YgHzk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCwy29G6LPUKgDZ9n7HcZBvnvTmww",
+      "thumbnailUrl": "https://i.ytimg.com/vi/90o8R8YgHzk/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLAsP9TNlbDg9eiU3R_VCWV2h8O9nA",
       "liveStatus": "",
       "publishedAt": "2025-12-05",
       "subtitles": {
@@ -447,9 +517,10 @@
     {
       "videoId": "pFjDncEdwu4",
       "videoUrl": "https://www.youtube.com/watch?v=pFjDncEdwu4",
+      "youtubeUrl": "https://www.youtube.com/watch?v=pFjDncEdwu4",
       "title": "🍎만유인력? 지미뉴트론?? 언니즈의 고품격 바보 전쟁🖤🩷 | Z-HAN & IVI’s BRAIN MATCH #MEU_LIVE",
       "duration": 5583,
-      "thumbnailUrl": "https://i.ytimg.com/vi/pFjDncEdwu4/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAcWkfhOOoRPaMemgimfSWcmBT8CQ",
+      "thumbnailUrl": "https://i.ytimg.com/vi/pFjDncEdwu4/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLB0dCN388buZJTCcmP0h2-CoRa_Lg",
       "liveStatus": "",
       "publishedAt": "2025-12-03",
       "subtitles": {
@@ -459,9 +530,10 @@
     {
       "videoId": "y14Dt2WAcDk",
       "videoUrl": "https://www.youtube.com/watch?v=y14Dt2WAcDk",
+      "youtubeUrl": "https://www.youtube.com/watch?v=y14Dt2WAcDk",
       "title": "진정한 춤꾼은 포기를 모르지🕺🏻 리츠💜의 댄스교실 with 지한, 초은🖤💚 | RITZ's Dance Class Live",
       "duration": 6705,
-      "thumbnailUrl": "https://i.ytimg.com/vi/y14Dt2WAcDk/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAmmCe-XLBz7lgJMb8QKtpPFHEkgw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/y14Dt2WAcDk/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDHwLEBW-nm7bAkWgURgkCUzm-h0w",
       "liveStatus": "",
       "publishedAt": "2025-11-30",
       "subtitles": {
@@ -471,9 +543,10 @@
     {
       "videoId": "ckU8chXMPCA",
       "videoUrl": "https://www.youtube.com/watch?v=ckU8chXMPCA",
+      "youtubeUrl": "https://www.youtube.com/watch?v=ckU8chXMPCA",
       "title": "😵‍💫선생님 진도가 너무 빨라요 🤗할 수 있어! 의심하지 마! 이비🩷의 댄스교실 with 수아🩵 | IVI's Dance Class Live",
       "duration": 5733,
-      "thumbnailUrl": "https://i.ytimg.com/vi/ckU8chXMPCA/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDQNmLu71DfbpnptTUwd789CXZ9LQ",
+      "thumbnailUrl": "https://i.ytimg.com/vi/ckU8chXMPCA/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLCM2FK8dAcaTx5XyPQLkaVmFzvmzg",
       "liveStatus": "",
       "publishedAt": "2025-11-26",
       "subtitles": {
@@ -483,9 +556,10 @@
     {
       "videoId": "TFmduS3XMEU",
       "videoUrl": "https://www.youtube.com/watch?v=TFmduS3XMEU",
+      "youtubeUrl": "https://www.youtube.com/watch?v=TFmduS3XMEU",
       "title": "😉서운하지 말자! 폭로와 해명이 난무한 토크 라이브 🖤🩷🩵💜💚｜#MEU_LIVE",
       "duration": 7210,
-      "thumbnailUrl": "https://i.ytimg.com/vi/TFmduS3XMEU/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAQJ7KW1Rx2-2NUd_1ed7Y5VAw3Kw",
+      "thumbnailUrl": "https://i.ytimg.com/vi/TFmduS3XMEU/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLDLBkbOsC36H_nlDDyxsJqqDK1huA",
       "liveStatus": "",
       "publishedAt": "2025-11-23",
       "subtitles": {
@@ -496,9 +570,10 @@
     {
       "videoId": "E0IFy_aESIA",
       "videoUrl": "https://www.youtube.com/watch?v=E0IFy_aESIA",
+      "youtubeUrl": "https://www.youtube.com/watch?v=E0IFy_aESIA",
       "title": "💫 진짜 처음 맞춰본 거 맞아요? 뿌뿌대공 & 공작영애의 케미 넘치는 랜덤플레이댄스 🩷💜｜Dance Unit Live",
       "duration": 5350,
-      "thumbnailUrl": "https://i.ytimg.com/vi/E0IFy_aESIA/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDWBwguGDn547OSQzRmv3KjuD-20Q",
+      "thumbnailUrl": "https://i.ytimg.com/vi/E0IFy_aESIA/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBY79ZGKdUX0fYfcp22AazZXVmmmg",
       "liveStatus": "",
       "publishedAt": "2025-11-21",
       "subtitles": {
@@ -509,9 +584,10 @@
     {
       "videoId": "eCO4dVFHbRM",
       "videoUrl": "https://www.youtube.com/watch?v=eCO4dVFHbRM",
+      "youtubeUrl": "https://www.youtube.com/watch?v=eCO4dVFHbRM",
       "title": "✦₊˚《교양 있는 영애들의 저세상 노래방 텐션에 휘말려버렸다》🖤🩵💚 | Vocal Unit Live",
       "duration": 7304,
-      "thumbnailUrl": "https://i.ytimg.com/vi/eCO4dVFHbRM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDAZLtDtqGVASvUD16ip2a8_jghHA",
+      "thumbnailUrl": "https://i.ytimg.com/vi/eCO4dVFHbRM/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLA-5bbpsofLaQ7LRI7wQ68ZZukF3Q",
       "liveStatus": "",
       "publishedAt": "2025-11-19",
       "subtitles": {
@@ -522,9 +598,10 @@
     {
       "videoId": "atLMUUGqIwo",
       "videoUrl": "https://www.youtube.com/watch?v=atLMUUGqIwo",
+      "youtubeUrl": "https://www.youtube.com/watch?v=atLMUUGqIwo",
       "title": "첫 등장부터 이래도 돼요? MEU의 우당탕탕 첫 라이브🐈 | Pre-Debut Live",
       "duration": 5456,
-      "thumbnailUrl": "https://i.ytimg.com/vi/atLMUUGqIwo/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBHAnlXV4flIVqVI3PZ-ppK1-7L-w",
+      "thumbnailUrl": "https://i.ytimg.com/vi/atLMUUGqIwo/hqdefault.jpg?sqp=-oaymwEgCNACELwBSFXyq4qpAxIIARUAAIhCGAFwAcABBrgC9xg=&rs=AOn4CLBokapHymSX8wno75Mf2eM0ex-YZw",
       "liveStatus": "",
       "publishedAt": "2025-11-16",
       "subtitles": {

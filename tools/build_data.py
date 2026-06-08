@@ -15,6 +15,8 @@ from collections import defaultdict
 from difflib import SequenceMatcher
 from pathlib import Path
 
+from meufan_core import KNOWN_LANGS, LANG_LABELS, normalize_srt_ref, extract_lang, parse_srt_text
+
 # Fix Windows console encoding
 if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
@@ -23,93 +25,10 @@ if sys.platform == 'win32':
 BASE_DIR = Path(__file__).parent
 SUBTITLE_DIR = BASE_DIR / 'subtitles'
 
-# Language configuration
-KNOWN_LANGS = ['ko', 'en', 'ja', 'zh']
-LANG_LABELS = {'ko': '한국어', 'en': 'English', 'ja': '日本語', 'zh': '中文'}
-DEFAULT_LANG = 'ko'
-SUBTITLE_PREFIX = 'subtitles/'
-LANG_ALIASES = {
-    'ko': ['ko', 'kor', 'kr', 'korean'],
-    'en': ['en', 'eng', 'english'],
-    'ja': ['ja', 'jp', 'jpn', 'japanese'],
-    'zh': ['zh', 'zh-cn', 'zh-tw', 'zh-hans', 'zh-hant', 'cn', 'chinese'],
-}
-
-
-def normalize_srt_ref(filename):
-    filename = (filename or '').replace('\\', '/')
-    if filename.startswith(SUBTITLE_PREFIX):
-        return filename
-    return SUBTITLE_PREFIX + os.path.basename(filename)
-
-
-def extract_lang(filename):
-    """Extract (base_stem, lang_code) from an SRT filename.
-    'video.ko.srt' -> ('video', 'ko')
-    'video.en.srt' -> ('video', 'en')
-    'video.srt'     -> ('video', 'ko')  -- default Korean
-    """
-    name = filename
-    if name.lower().endswith('.srt'):
-        name = name[:-4]  # strip .srt
-    prefixed = re.match(r'^\[([a-z]{2}(?:-[a-z]{2,4})?)-[a-zA-Z0-9_-]+\]\s*(.+)$', name)
-    if prefixed:
-        lang_token = prefixed.group(1).lower()
-        for lang, aliases in LANG_ALIASES.items():
-            if lang_token in aliases:
-                return prefixed.group(2), lang
-    name = re.sub(r'\.srt([._-])', r'\1', name, flags=re.IGNORECASE)
-    lowered = name.lower()
-    tokens = [token for token in re.split(r'[^a-z0-9]+', lowered) if token]
-    compact = lowered.replace('_', '-')
-    for lang, aliases in LANG_ALIASES.items():
-        for alias in aliases:
-            alias_tokens = [token for token in re.split(r'[^a-z0-9]+', alias) if token]
-            if alias in tokens or compact.endswith('-' + alias) or compact.endswith('.' + alias):
-                return re.sub(r'([._-])' + re.escape(alias) + r'([._-](translation|translated|subtitle|subtitles))?$', '', name, flags=re.IGNORECASE), lang
-            if alias_tokens and len(alias_tokens) > 1:
-                for i in range(0, len(tokens) - len(alias_tokens) + 1):
-                    if tokens[i:i + len(alias_tokens)] == alias_tokens:
-                        return re.sub(r'([._-])' + re.escape(alias) + r'([._-](translation|translated|subtitle|subtitles))?$', '', name, flags=re.IGNORECASE), lang
-    return name, DEFAULT_LANG
-
-
 def parse_srt(filepath):
     """Parse an SRT file into a list of subtitle entries."""
     with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    blocks = re.split(r'\n\s*\n', content.strip())
-    subtitles = []
-
-    for block in blocks:
-        lines = block.strip().split('\n')
-        if len(lines) < 2:
-            continue
-
-        timestamp_line = lines[1] if len(lines) > 1 else ''
-        match = re.match(
-            r'(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})',
-            timestamp_line
-        )
-        if not match:
-            continue
-
-        start_h, start_m, start_s, start_ms = [int(x) for x in match.groups()[:4]]
-        end_h, end_m, end_s, end_ms = [int(x) for x in match.groups()[4:]]
-
-        start_sec = start_h * 3600 + start_m * 60 + start_s + start_ms / 1000
-        end_sec = end_h * 3600 + end_m * 60 + end_s + end_ms / 1000
-
-        text = '\n'.join(lines[2:]).strip()
-
-        subtitles.append({
-            'start': round(start_sec, 3),
-            'end': round(end_sec, 3),
-            'text': text
-        })
-
-    return subtitles
+        return parse_srt_text(f.read())
 
 
 def clean_title(title):
@@ -233,6 +152,7 @@ def main():
         entry = {
             'videoId': csv_entry['video_id'],
             'videoUrl': f'https://www.youtube.com/watch?v={csv_entry["video_id"]}',
+            'youtubeUrl': f'https://www.youtube.com/watch?v={csv_entry["video_id"]}',
             'title': csv_entry['title'],
             'duration': 0,
             'publishedAt': '',

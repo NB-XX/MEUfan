@@ -14,12 +14,26 @@ import json
 import os
 import re
 import secrets
+import shutil
 import subprocess
 import sys
 import urllib.parse
 from http import cookies
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
+
+from meufan_core import (
+    KNOWN_LANGS,
+    LANG_LABELS,
+    SUBTITLE_PREFIX,
+    count_subtitles,
+    detect_lang_from_filename,
+    detect_language,
+    format_srt,
+    normalize_srt_ref,
+    parse_srt_text,
+    strip_lang_suffix,
+)
 
 if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
@@ -29,20 +43,14 @@ BASE_DIR = Path(__file__).parent
 MAPPING_PATH = BASE_DIR / 'mapping.json'
 SUBTITLE_DIR = BASE_DIR / 'subtitles'
 DATA_DIR = BASE_DIR / 'data'
+BACKUP_DIR = DATA_DIR / 'backups'
 GLOSSARY_PATH = DATA_DIR / 'glossary.json'
 ADMIN_CONFIG_PATH = DATA_DIR / 'admin_config.json'
 ADMIN_SESSIONS_PATH = DATA_DIR / 'admin_sessions.json'
 ADMIN_ACCESS_LOG = DATA_DIR / 'admin_access.log.jsonl'
 ADMIN_ACTION_LOG = DATA_DIR / 'admin_actions.log.jsonl'
-KNOWN_LANGS = ['ko', 'en', 'ja', 'zh']
-LANG_LABELS = {'ko': '한국어', 'en': 'English', 'ja': '日本語', 'zh': '中文'}
-SUBTITLE_PREFIX = 'subtitles/'
-LANG_ALIASES = {
-    'ko': ['ko', 'kor', 'kr', 'korean'],
-    'en': ['en', 'eng', 'english'],
-    'ja': ['ja', 'jp', 'jpn', 'japanese'],
-    'zh': ['zh', 'zh-cn', 'zh-tw', 'zh-hans', 'zh-hant', 'cn', 'chinese'],
-}
+STATIC_BLOCK_PREFIXES = ('/data/', '/.git/', '/.omc/', '/__pycache__/')
+ADMIN_ENV_KEYS = ('MEUFAN_ADMIN_PASSWORDS', 'ADMIN_PASSWORDS', 'ADMIN_CREDENTIALS')
 DEFAULT_GLOSSARY = {
     'terms': [
         {'id': 'zhan', 'label': 'Z-Han', 'aliases': {'ko': ['지한'], 'en': ['Z-Han', 'Z Han', 'ZHan'], 'ja': [], 'zh': ['智涵']}},
@@ -54,9 +62,43 @@ DEFAULT_GLOSSARY = {
 }
 
 PORT = 8080
+HOST = os.environ.get('MEUFAN_HOST', '127.0.0.1')
 for i, arg in enumerate(sys.argv):
     if arg == '--port' and i + 1 < len(sys.argv):
         PORT = int(sys.argv[i + 1])
+    elif arg == '--host' and i + 1 < len(sys.argv):
+        HOST = sys.argv[i + 1]
+
+
+def allowed_cors_origins():
+    origins = {
+        f'http://localhost:{PORT}',
+        f'http://127.0.0.1:{PORT}',
+    }
+    extra = os.environ.get('MEUFAN_ALLOWED_ORIGINS', '')
+    origins.update(origin.strip().rstrip('/') for origin in extra.split(',') if origin.strip())
+    return origins
+
+
+def admin_credentials_env():
+    for key in ADMIN_ENV_KEYS:
+        value = os.environ.get(key, '')
+        if value:
+            return value
+    return ''
+
+
+def is_loopback_address(value):
+    value = (value or '').strip().lower()
+    return value in ('localhost', '::1') or value.startswith('127.')
+
+
+def is_local_bind():
+    return is_loopback_address(HOST)
+
+
+def admin_auth_disabled():
+    return is_local_bind() and not ADMIN_CONFIG_PATH.exists() and not admin_credentials_env()
 
 
 def now_iso():
@@ -66,6 +108,7 @@ def now_iso():
 def ensure_dirs():
     SUBTITLE_DIR.mkdir(exist_ok=True)
     DATA_DIR.mkdir(exist_ok=True)
+    BACKUP_DIR.mkdir(exist_ok=True)
 
 
 def read_json(path, default):
@@ -84,6 +127,24 @@ def write_json(path, data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
+def backup_file(path, reason):
+    path = Path(path)
+    if not path.exists() or not path.is_file():
+        return None
+    ensure_dirs()
+    safe_reason = re.sub(r'[^a-zA-Z0-9_.-]+', '_', reason).strip('_') or 'backup'
+    stamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+    target_dir = BACKUP_DIR / safe_reason
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / f'{stamp}-{path.name}'
+    counter = 1
+    while target.exists():
+        target = target_dir / f'{stamp}-{counter}-{path.name}'
+        counter += 1
+    shutil.copy2(path, target)
+    return target
+
+
 def append_log(path, data):
     ensure_dirs()
     data = dict(data)
@@ -91,14 +152,6 @@ def append_log(path, data):
     with open(path, 'a', encoding='utf-8') as f:
         f.write(json.dumps(data, ensure_ascii=False, separators=(',', ':')) + '\n')
 
-
-def normalize_srt_ref(filename):
-    if not filename:
-        return filename
-    filename = filename.replace('\\', '/')
-    if filename.startswith(SUBTITLE_PREFIX):
-        return filename
-    return SUBTITLE_PREFIX + os.path.basename(filename)
 
 
 def safe_subtitle_path(filename, must_exist=False):
@@ -120,53 +173,6 @@ def safe_subtitle_path(filename, must_exist=False):
 def srt_disk_path(filename):
     return safe_subtitle_path(filename)[1]
 
-
-def detect_lang_from_filename(filename):
-    name = os.path.basename(filename).lower()
-    prefixed = re.match(r'^\[([a-z]{2}(?:-[a-z]{2,4})?)[-_][a-z0-9_-]+\]', name)
-    if prefixed:
-        token = prefixed.group(1)
-        for lang, aliases in LANG_ALIASES.items():
-            if token in aliases:
-                return lang
-    stem = re.sub(r'\.srt$', '', name)
-    tokens = [token for token in re.split(r'[^a-z0-9]+', stem) if token]
-    compact = stem.replace('_', '-')
-    for lang, aliases in LANG_ALIASES.items():
-        for alias in aliases:
-            alias_tokens = [token for token in re.split(r'[^a-z0-9]+', alias) if token]
-            if alias in tokens or compact.endswith('-' + alias) or compact.endswith('.' + alias) or compact.endswith('_' + alias):
-                return lang
-            if alias_tokens and len(alias_tokens) > 1:
-                for i in range(0, len(tokens) - len(alias_tokens) + 1):
-                    if tokens[i:i + len(alias_tokens)] == alias_tokens:
-                        return lang
-    return None
-
-
-def strip_lang_suffix(filename):
-    stem = os.path.basename(filename)
-    stem = re.sub(r'\.srt$', '', stem, flags=re.IGNORECASE)
-    stem = re.sub(r'^\[[a-z]{2}(?:-[a-z]{2,4})?-[a-zA-Z0-9_-]+\]\s*', '', stem)
-    stem = re.sub(r'\.srt([._-])', r'\1', stem, flags=re.IGNORECASE)
-    for aliases in LANG_ALIASES.values():
-        for alias in sorted(aliases, key=len, reverse=True):
-            stem = re.sub(r'([._-])' + re.escape(alias) + r'([._-](translation|translated|subtitle|subtitles))?$', '', stem, flags=re.IGNORECASE)
-    return stem
-
-
-def detect_language(text):
-    hangul = len(re.findall(r'[가-힯ᄀ-ᇿ㄰-㆏]', text))
-    hiragana = len(re.findall(r'[぀-ゟ]', text))
-    katakana = len(re.findall(r'[゠-ヿ]', text))
-    cjk = len(re.findall(r'[一-鿿]', text))
-    if hiragana + katakana > 5:
-        return 'ja'
-    if hangul > 5:
-        return 'ko'
-    if cjk > 5:
-        return 'zh'
-    return 'en'
 
 
 def parse_multipart(body, boundary):
@@ -207,6 +213,7 @@ def load_mapping():
 
 
 def save_mapping(data):
+    backup_file(MAPPING_PATH, 'mapping')
     write_json(MAPPING_PATH, data)
 
 
@@ -246,49 +253,14 @@ def rename_srt_file(old_rel_path, new_rel_path):
     old_ref, old_path = safe_subtitle_path(old_rel_path, must_exist=True)
     new_ref, new_path = unique_subtitle_ref(new_rel_path, old_path)
     if old_path.resolve() != new_path.resolve():
+        backup_file(old_path, 'srt_rename')
         new_path.parent.mkdir(parents=True, exist_ok=True)
         old_path.rename(new_path)
     return new_ref
 
 
-def count_subtitles(text):
-    text = text.strip()
-    if not text:
-        return 0
-    return len(re.split(r'\n\s*\n', text))
+parse_srt = parse_srt_text
 
-
-def parse_srt(text):
-    cues = []
-    for block in re.split(r'\n\s*\n', text.strip()):
-        lines = block.strip().splitlines()
-        if len(lines) < 2:
-            continue
-        time_line = lines[1] if re.match(r'^\d+\s*$', lines[0]) else lines[0]
-        text_start = 2 if time_line == (lines[1] if len(lines) > 1 else '') else 1
-        m = re.match(r'(\d{2}):(\d{2}):(\d{2})[,.](\d{3})\s*-->\s*(\d{2}):(\d{2}):(\d{2})[,.](\d{3})', time_line)
-        if not m:
-            continue
-        vals = [int(x) for x in m.groups()]
-        start = vals[0] * 3600 + vals[1] * 60 + vals[2] + vals[3] / 1000
-        end = vals[4] * 3600 + vals[5] * 60 + vals[6] + vals[7] / 1000
-        cues.append({'start': round(start, 3), 'end': round(end, 3), 'text': '\n'.join(lines[text_start:]).strip()})
-    return cues
-
-
-def srt_time(seconds):
-    ms = int(round(float(seconds) * 1000))
-    h, rem = divmod(ms, 3600000)
-    m, rem = divmod(rem, 60000)
-    s, ms = divmod(rem, 1000)
-    return f'{h:02d}:{m:02d}:{s:02d},{ms:03d}'
-
-
-def format_srt(cues):
-    blocks = []
-    for i, cue in enumerate(cues, 1):
-        blocks.append(f'{i}\n{srt_time(cue["start"])} --> {srt_time(cue["end"])}\n{cue["text"].strip()}')
-    return '\n\n'.join(blocks) + '\n'
 
 
 def default_glossary():
@@ -365,7 +337,7 @@ def public_admin(admin):
 
 def load_admin_config():
     config = read_json(ADMIN_CONFIG_PATH, {'admins': [], 'sessionHours': 24})
-    env_passwords = os.environ.get('MEUFAN_ADMIN_PASSWORDS') or os.environ.get('ADMIN_PASSWORDS') or os.environ.get('ADMIN_CREDENTIALS') or ''
+    env_passwords = admin_credentials_env()
     if env_passwords:
         config['admins'] = parse_admin_credentials(env_passwords)
     config.setdefault('admins', [])
@@ -399,19 +371,32 @@ class APIHandler(SimpleHTTPRequestHandler):
             print(f"  {args[0]}")
 
     def end_headers(self):
-        self.send_header('Access-Control-Allow-Origin', self.headers.get('Origin', '*'))
+        origin = self.headers.get('Origin')
+        if origin in allowed_cors_origins():
+            self.send_header('Access-Control-Allow-Origin', origin)
+            self.send_header('Access-Control-Allow-Credentials', 'true')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.send_header('Access-Control-Allow-Credentials', 'true')
         super().end_headers()
 
     def do_OPTIONS(self):
         self.send_response(200)
         self.end_headers()
 
+    def do_HEAD(self):
+        parsed = urllib.parse.urlparse(self.path)
+        if self.is_blocked_static_path(parsed.path):
+            self.send_response(403)
+            self.end_headers()
+            return
+        super().do_HEAD()
+
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
+        if self.is_blocked_static_path(path):
+            self.send_json({'error': 'Forbidden'}, 403)
+            return
         if path == '/api/mapping':
             self.send_json(load_mapping())
         elif path == '/api/languages':
@@ -434,6 +419,10 @@ class APIHandler(SimpleHTTPRequestHandler):
         else:
             super().do_GET()
 
+    def is_blocked_static_path(self, path):
+        normalized = urllib.parse.unquote(path).replace('\\', '/')
+        return any(normalized == prefix[:-1] or normalized.startswith(prefix) for prefix in STATIC_BLOCK_PREFIXES)
+
     def do_POST(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
@@ -446,7 +435,8 @@ class APIHandler(SimpleHTTPRequestHandler):
             return
         if path not in public and path in {
             '/api/upload', '/api/upload-batch', '/api/assign-batch', '/api/assign', '/api/mapping',
-            '/api/sync', '/api/glossary', '/api/subtitles/standardize', '/api/subtitle/save'
+            '/api/sync', '/api/glossary', '/api/subtitles/standardize', '/api/subtitle/save',
+            '/api/srt/cleanup-batch'
         } and not self.require_admin():
             return
         if path == '/api/upload':
@@ -488,6 +478,8 @@ class APIHandler(SimpleHTTPRequestHandler):
         return json.loads(body or b'{}')
 
     def current_admin(self):
+        if admin_auth_disabled() and is_loopback_address(self.client_address[0]):
+            return 'local'
         cookie_header = self.headers.get('Cookie', '')
         jar = cookies.SimpleCookie()
         try:
@@ -532,6 +524,9 @@ class APIHandler(SimpleHTTPRequestHandler):
         self.send_header('Set-Cookie', 'meufan_admin_session=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax')
 
     def handle_admin_login(self):
+        if admin_auth_disabled() and is_loopback_address(self.client_address[0]):
+            self.send_json({'ok': True, 'alias': 'local', 'localAuth': True})
+            return
         try:
             req = self.read_json_body()
         except json.JSONDecodeError:
@@ -560,6 +555,9 @@ class APIHandler(SimpleHTTPRequestHandler):
 
     def handle_admin_logout(self):
         alias = self.current_admin()
+        if admin_auth_disabled() and alias == 'local':
+            self.send_json({'ok': True, 'localAuth': True})
+            return
         cookie_header = self.headers.get('Cookie', '')
         jar = cookies.SimpleCookie()
         try:
@@ -581,7 +579,7 @@ class APIHandler(SimpleHTTPRequestHandler):
 
     def handle_admin_session(self):
         alias = self.current_admin()
-        self.send_json({'ok': True, 'admin': bool(alias), 'alias': alias})
+        self.send_json({'ok': True, 'admin': bool(alias), 'alias': alias, 'localAuth': bool(alias == 'local' and admin_auth_disabled())})
 
     def log_action(self, action, **extra):
         alias = self.current_admin()
@@ -622,6 +620,8 @@ class APIHandler(SimpleHTTPRequestHandler):
         else:
             rel, dest_path = unique_subtitle_ref(SUBTITLE_PREFIX + filename)
         ensure_dirs()
+        if dest_path.exists():
+            backup_file(dest_path, 'srt_overwrite')
         dest_path.write_bytes(data)
         try:
             text = data.decode('utf-8')
@@ -770,6 +770,7 @@ class APIHandler(SimpleHTTPRequestHandler):
                 for lang in [lang for lang, fn in subs.items() if normalize_srt_ref(fn) == filename]:
                     del subs[lang]
             save_mapping(mapping)
+        backup_file(filepath, 'srt_delete')
         filepath.unlink()
         self.log_action('delete_srt', file=filename)
         self.send_json({'ok': True, 'filename': filename})
@@ -904,6 +905,7 @@ class APIHandler(SimpleHTTPRequestHandler):
             self.send_json({'error': 'Subtitle index out of range'}, 400)
             return
         cues[idx] = {'start': round(start, 3), 'end': round(end, 3), 'text': text}
+        backup_file(path, 'srt_edit')
         path.write_text(format_srt(cues), encoding='utf-8')
         self.log_action('save_subtitle_cue', videoId=video_id, lang=lang, index=idx, file=ref)
         self.send_json({'ok': True, 'cue': cues[idx], 'subtitles': cues})
@@ -922,15 +924,26 @@ class APIHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
+    if '--hash-password' in sys.argv:
+        idx = sys.argv.index('--hash-password')
+        if idx + 1 >= len(sys.argv):
+            print('Usage: python server.py --hash-password <password>')
+            raise SystemExit(2)
+        print(hash_password(sys.argv[idx + 1]))
+        raise SystemExit(0)
+
     ensure_dirs()
-    if not ADMIN_CONFIG_PATH.exists() and not os.environ.get('MEUFAN_ADMIN_PASSWORDS'):
-        print('Admin auth is not configured. For local/dev, create data/admin_config.json with {"admins":[{"alias":"owner","password":"..."}]}; for deploy, set MEUFAN_ADMIN_PASSWORDS=owner:password,helper:password.')
-    print(f'MEUfan server starting on http://localhost:{PORT}')
-    print(f'  App:   http://localhost:{PORT}/')
-    print(f'  Admin: http://localhost:{PORT}/admin')
-    print(f'  API:   http://localhost:{PORT}/api/mapping')
+    base_url = f'http://{HOST}:{PORT}'
+    if admin_auth_disabled():
+        print('Admin auth is disabled for local-only mode. Configure data/admin_config.json or MEUFAN_ADMIN_PASSWORDS to require login.')
+    elif not is_local_bind() and not load_admin_config().get('admins'):
+        print('WARNING: Admin auth is not configured and the server is not bound to a loopback address. Admin APIs will require login but no accounts exist.')
+    print(f'MEUfan server starting on {base_url}')
+    print(f'  App:   {base_url}/')
+    print(f'  Admin: {base_url}/admin')
+    print(f'  API:   {base_url}/api/mapping')
     print('  Press Ctrl+C to stop')
-    server = HTTPServer(('0.0.0.0', PORT), APIHandler)
+    server = HTTPServer((HOST, PORT), APIHandler)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
