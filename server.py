@@ -467,6 +467,8 @@ class APIHandler(SimpleHTTPRequestHandler):
             self.handle_standardize_subtitles()
         elif path == '/api/subtitle/save':
             self.handle_save_subtitle_cue()
+        elif path == '/api/srt/cleanup-batch':
+            self.handle_cleanup_batch()
         else:
             self.send_json({'error': 'Not found'}, 404)
 
@@ -718,6 +720,12 @@ class APIHandler(SimpleHTTPRequestHandler):
             if v.get('videoId') == video_id:
                 if remove:
                     old_file = v.get('subtitles', {}).pop(lang, None)
+                    if old_file:
+                        try:
+                            _, filepath = safe_subtitle_path(old_file, must_exist=True)
+                            filepath.unlink()
+                        except Exception:
+                            pass
                     save_mapping(mapping)
                     self.log_action('unassign_srt', videoId=video_id, lang=lang, file=old_file)
                     self.send_json({'ok': True, 'filename': None})
@@ -765,6 +773,28 @@ class APIHandler(SimpleHTTPRequestHandler):
         filepath.unlink()
         self.log_action('delete_srt', file=filename)
         self.send_json({'ok': True, 'filename': filename})
+
+    def handle_cleanup_batch(self):
+        try:
+            req = self.read_json_body()
+        except json.JSONDecodeError:
+            self.send_json({'error': 'Invalid JSON'}, 400)
+            return
+        files = req.get('files', [])
+        if not isinstance(files, list):
+            self.send_json({'error': 'files must be a list'}, 400)
+            return
+        deleted = []
+        failed = []
+        for filename in files:
+            try:
+                _, filepath = safe_subtitle_path(filename, must_exist=True)
+                filepath.unlink()
+                deleted.append(filename)
+            except Exception as e:
+                failed.append({'filename': filename, 'error': str(e)})
+        self.log_action('cleanup_batch', deleted=len(deleted), failed=len(failed))
+        self.send_json({'ok': True, 'deleted': deleted, 'failed': failed})
 
     def handle_scan(self):
         from difflib import SequenceMatcher

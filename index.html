@@ -785,6 +785,27 @@ function highlightCurrentSubtitle(){
   }
 }
 
+function scrollResultsToCurrent(){
+  if(currentVideoIdx<0||currentSubIdx<0||currentResults.length===0)return;
+  var items=resultsList.querySelectorAll('.sub-item');
+  for(var i=0;i<items.length;i++){
+    var v=parseInt(items[i].dataset.v),s=parseInt(items[i].dataset.s);
+    if(v===currentVideoIdx&&s===currentSubIdx){
+      items[i].scrollIntoView({block:'center',behavior:'smooth'});
+      var group=items[i].closest('.video-group');
+      if(group&&!group.classList.contains('expanded'))group.classList.add('expanded');
+      return;
+    }
+  }
+  var groups=resultsList.querySelectorAll('.video-group');
+  for(var j=0;j<groups.length;j++){
+    if(parseInt(groups[j].dataset.v)===currentVideoIdx){
+      groups[j].querySelector('.video-group-header').scrollIntoView({block:'center',behavior:'smooth'});
+      return;
+    }
+  }
+}
+
 function scrollToCurrentSubtitle(){
   if(currentSubIdx<0)return;
   var line=subtitleOverlay.querySelector('.sub-line.current');
@@ -956,7 +977,7 @@ function playAt(vIdx,sIdx,startTime,lang){
   playerPlaceholder.style.display='none';
   renderSubtitles(vIdx);
   setMobileResultsCollapsed(true);
-  setTimeout(function(){highlightCurrentSubtitle();scrollToCurrentSubtitle();updateFloatingSubtitle(startTime);},400);
+  setTimeout(function(){highlightCurrentSubtitle();scrollToCurrentSubtitle();scrollResultsToCurrent();updateFloatingSubtitle(startTime);},400);
   updateVideoInfo(video);
 }
 

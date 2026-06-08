@@ -685,7 +685,13 @@ function openBatchModal(){
   document.getElementById('batchImportBtn').disabled=true;
   document.getElementById('batchStatus').textContent='';
 }
-function closeBatchModal(){document.getElementById('batchModal').classList.remove('show')}
+function closeBatchModal(){
+  if(batchResults.length>0){
+    var files=batchResults.map(function(r){return r.filename});
+    api('POST','/api/srt/cleanup-batch',{files:files}).catch(function(){});
+  }
+  document.getElementById('batchModal').classList.remove('show');
+}
 
 function onBatchFilesSelected(input){
   batchFiles=Array.from(input.files).filter(function(f){return f.name.toLowerCase().endsWith('.srt')});
@@ -745,7 +751,7 @@ function doBatchImport(){
 
   api('POST','/api/assign-batch',{assignments:assignments}).then(function(r){
     toast(t('assigned',{count:r.assigned}),'success');
-    closeBatchModal();loadData();
+    batchResults=[];closeBatchModal();loadData();
   }).catch(function(e){toast(t('failed',{message:e.message}),'error')})
   .finally(function(){
     document.getElementById('batchImportBtn').disabled=false;
