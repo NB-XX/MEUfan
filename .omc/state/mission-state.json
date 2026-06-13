@@ -1,0 +1,69 @@
+{
+  "updatedAt": "2026-06-05T06:34:42.223Z",
+  "missions": [
+    {
+      "id": "session:152ab102-1f15-40bd-b715-91e62e97e30f:none",
+      "source": "session",
+      "name": "none",
+      "objective": "Session mission",
+      "createdAt": "2026-06-05T03:48:10.952Z",
+      "updatedAt": "2026-06-05T06:34:42.223Z",
+      "status": "done",
+      "workerCount": 1,
+      "taskCounts": {
+        "total": 1,
+        "pending": 0,
+        "blocked": 0,
+        "inProgress": 0,
+        "completed": 1,
+        "failed": 0
+      },
+      "agents": [
+        {
+          "name": "designer:affee26",
+          "role": "designer",
+          "ownership": "affee260b9b5cd161",
+          "status": "done",
+          "currentStep": null,
+          "latestUpdate": "completed",
+          "completedSummary": null,
+          "updatedAt": "2026-06-05T06:34:42.223Z"
+        }
+      ],
+      "timeline": [
+        {
+          "id": "session-start:affee260b9b5cd161:2026-06-05T03:48:10.952Z",
+          "at": "2026-06-05T03:48:10.952Z",
+          "kind": "update",
+          "agent": "designer:affee26",
+          "detail": "started designer:affee26",
+          "sourceKey": "session-start:affee260b9b5cd161"
+        },
+        {
+          "id": "session-stop:affee260b9b5cd161:2026-06-05T03:50:05.897Z",
+          "at": "2026-06-05T03:50:05.897Z",
+          "kind": "completion",
+          "agent": "designer:affee26",
+          "detail": "completed",
+          "sourceKey": "session-stop:affee260b9b5cd161"
+        },
+        {
+          "id": "session-stop:a906026ec274df144:2026-06-05T03:58:21.817Z",
+          "at": "2026-06-05T03:58:21.817Z",
+          "kind": "completion",
+          "agent": "designer:affee26",
+          "detail": "completed",
+          "sourceKey": "session-stop:a906026ec274df144"
+        },
+        {
+          "id": "session-stop:ad9a35cbb4b16045b:2026-06-05T06:34:42.223Z",
+          "at": "2026-06-05T06:34:42.223Z",
+          "kind": "completion",
+          "agent": "designer:affee26",
+          "detail": "completed",
+          "sourceKey": "session-stop:ad9a35cbb4b16045b"
+        }
+      ]
+    }
+  ]
+}
