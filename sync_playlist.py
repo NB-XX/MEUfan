@@ -126,7 +126,12 @@ def fetch_playlist():
     try:
         page = fetch_url(PLAYLIST_PAGE_URL)
         initial_data = extract_yt_initial_data(page)
+        # Try old format (playlistVideoRenderer) first, then new format (lockupViewModel)
         renderers = find_playlist_video_renderers(initial_data)
+        use_new_format = False
+        if not renderers:
+            renderers = find_playlist_lockup_viewmodels(initial_data)
+            use_new_format = True
     except Exception as e:
         print(f"ERROR: cannot fetch playlist page: {e}")
         sys.exit(1)
@@ -134,23 +139,36 @@ def fetch_playlist():
     videos = []
     seen = set()
     for renderer in renderers:
-        video_id = renderer.get('videoId') or ''
+        if use_new_format:
+            video_id = extract_lockup_video_id(renderer)
+            title = extract_lockup_title(renderer)
+            duration = extract_lockup_duration(renderer)
+            thumbnail_url = extract_lockup_thumbnail(renderer)
+            published_at = ''  # lockupViewModel doesn't include publish date
+        else:
+            video_id = renderer.get('videoId') or ''
+            title = text_from_runs(renderer.get('title')) or renderer.get('title', {}).get('simpleText', '')
+            duration = parse_duration_seconds(text_from_runs(renderer.get('lengthText')))
+            thumbnail_url = best_thumbnail_url(renderer.get('thumbnail'))
+            published_at = find_video_date(renderer)
+
         if not video_id or video_id in seen:
             continue
         seen.add(video_id)
 
-        title = text_from_runs(renderer.get('title')) or renderer.get('title', {}).get('simpleText', '')
         title = html.unescape(title).strip()
         if not title or title.lower() in ('private video', 'deleted video'):
             continue
 
-        published_at = find_video_date(renderer)
+        if not published_at:
+            published_at = find_video_date(renderer) if not use_new_format else ''
+
         videos.append({
             'videoId': video_id,
             'videoUrl': f'https://www.youtube.com/watch?v={video_id}',
             'title': title,
-            'duration': parse_duration_seconds(text_from_runs(renderer.get('lengthText'))),
-            'thumbnailUrl': best_thumbnail_url(renderer.get('thumbnail')),
+            'duration': duration,
+            'thumbnailUrl': thumbnail_url,
             'liveStatus': '',
             'publishedAt': published_at,
         })
@@ -160,6 +178,87 @@ def fetch_playlist():
         sys.exit(1)
 
     return videos
+
+
+# ===== New lockupViewModel format (YouTube 2026 redesign) =====
+
+def find_playlist_lockup_viewmodels(obj):
+    """Find all lockupViewModel entries for videos in the playlist data.
+    The new YouTube format stores videos in:
+      tabs[].tabRenderer.content.sectionListRenderer.contents[].itemSectionRenderer.contents[].lockupViewModel
+    """
+    found = []
+
+    def search(o):
+        if isinstance(o, dict):
+            # Direct lockupViewModel hit
+            if 'lockupViewModel' in o:
+                lockup = o['lockupViewModel']
+                if isinstance(lockup, dict) and lockup.get('contentType') == 'LOCKUP_CONTENT_TYPE_VIDEO':
+                    found.append(lockup)
+                    return
+            # itemSectionRenderer.contents may contain lockupViewModels
+            item_section = o.get('itemSectionRenderer')
+            if isinstance(item_section, dict):
+                contents = item_section.get('contents')
+                if isinstance(contents, list):
+                    for item in contents:
+                        search(item)
+                    return
+            # Recurse into dict values
+            for value in o.values():
+                search(value)
+        elif isinstance(o, list):
+            for item in o:
+                search(item)
+
+    search(obj)
+    return found
+
+
+def extract_lockup_video_id(lockup):
+    """Extract video ID from a lockupViewModel."""
+    return lockup.get('contentId') or ''
+
+
+def extract_lockup_title(lockup):
+    """Extract title from a lockupViewModel."""
+    metadata = lockup.get('metadata', {})
+    lockup_meta = metadata.get('lockupMetadataViewModel', {})
+    title_obj = lockup_meta.get('title', {})
+    return title_obj.get('content', '') if isinstance(title_obj, dict) else str(title_obj or '')
+
+
+def extract_lockup_duration(lockup):
+    """Extract duration in seconds from a lockupViewModel.
+    Duration is in: contentImage.thumbnailViewModel.overlays[0].thumbnailBottomOverlayViewModel.badges[0].thumbnailBadgeViewModel.text
+    """
+    try:
+        overlays = lockup.get('contentImage', {}).get('thumbnailViewModel', {}).get('overlays', [])
+        for overlay in overlays:
+            bottom_overlay = overlay.get('thumbnailBottomOverlayViewModel')
+            if not isinstance(bottom_overlay, dict):
+                continue
+            badges = bottom_overlay.get('badges', [])
+            for badge in badges:
+                badge_vm = badge.get('thumbnailBadgeViewModel')
+                if isinstance(badge_vm, dict) and badge_vm.get('text'):
+                    return parse_duration_seconds(badge_vm['text'])
+    except Exception:
+        pass
+    return 0
+
+
+def extract_lockup_thumbnail(lockup):
+    """Extract best thumbnail URL from a lockupViewModel."""
+    try:
+        sources = lockup.get('contentImage', {}).get('thumbnailViewModel', {}).get('image', {}).get('sources', [])
+        if not sources:
+            return ''
+        best = max(sources, key=lambda t: (t.get('width') or 0) * (t.get('height') or 0))
+        return best.get('url') or ''
+    except Exception:
+        return ''
 
 
 def load_publish_cache():
@@ -367,7 +466,7 @@ def extract_yt_initial_data(page):
             candidate = json.loads(page[start:end])
             if fallback is None:
                 fallback = candidate
-            if find_playlist_video_renderers(candidate):
+            if find_playlist_video_renderers(candidate) or find_playlist_lockup_viewmodels(candidate):
                 return candidate
         except (ValueError, json.JSONDecodeError):
             pass
