@@ -36,6 +36,7 @@
     <button class="btn" id="scanBtn" onclick="scanSrts()">Scan</button>
     <button class="btn" id="syncBtn" onclick="runSync(event)">Sync YouTube</button>
     <button class="btn" id="standardizeBtn" onclick="standardizeSubtitles()">Standardize names</button>
+    <button class="btn" id="cleanStaleBtn" onclick="cleanStaleMappings()" style="color:var(--red);border-color:var(--red)">Clean stale</button>
     <button class="btn" id="glossaryBtn" onclick="toggleGlossaryPanel()">Glossary</button>
   </div>
   <div class="sync-result" id="syncResult"></div>
@@ -106,7 +107,7 @@
   <div class="modal" style="max-width:680px">
     <h3 id="batchTitle">Batch import SRT</h3>
     <p id="batchHelp" style="font-size:12px;color:var(--text-dim);margin-bottom:12px">
-      Upload multiple SRT files at once. Language is auto-detected and videos are matched by filename similarity.
+      Upload multiple SRT files at once. Language is auto-detected — click the dropdown in each row to fix misdetections. Videos are matched by filename similarity.
     </p>
     <div class="field">
       <div class="drop-zone" id="batchDropZone" onclick="document.getElementById('batchFiles').click()" style="padding:24px">
@@ -140,6 +141,6 @@
 
 <div class="toast" id="toast"></div>
 
-<script src="/assets/admin.js"></script>
+<script src="/assets/admin.js?v=20260617"></script>
 </body>
 </html>

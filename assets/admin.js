@@ -13,6 +13,7 @@ function api(method, path, body){
 var mapping=null,allVideos=[],apiAvailable=true,sourceSaveTimers={};
 var uploadFileData=null,uploadFileName=null,uploadDetectedLang='ko';
 var glossary={terms:[]};
+var langOverrides={}; // filename -> lang for batch import language adjustment
 
 // ===== UI language =====
 function detectUiLang(){
@@ -47,7 +48,13 @@ var UI_TEXT={
     staticModeNotice:'⚠️ Running on static hosting. Management features (upload, assign, sync) are disabled. Clone the repo and run server.py locally for full admin access.',
     staticUploadDisabled:'Upload disabled on static hosting.',
     staticDetachDisabled:'Unassign disabled on static hosting.',
-    staticSyncDisabled:'YouTube sync disabled on static hosting.'
+    staticSyncDisabled:'YouTube sync disabled on static hosting.',
+    cleanStale:'Clean stale',
+    cleanStaleConfirm:'Remove {count} stale subtitle mappings?\nThese files no longer exist on disk:\n\n{files}',
+    cleanStaleDone:'Removed {count} stale mappings.',
+    cleanStaleNone:'No stale mappings found.',
+    batchConflictTooltip:'Already has a subtitle for this language — will be replaced',
+    batchChangeLang:'Click to change detected language'
   },
   ko:{
     pageTitle:'MEU 자막 관리자',openApp:'검색 앱 열기',searchVideos:'비디오 검색...',
@@ -71,7 +78,13 @@ var UI_TEXT={
     staticModeNotice:'⚠️ 정적 호스팅에서 실행 중입니다. 관리 기능(업로드, 할당, 동기화)은 비활성화됩니다. 전체 관리 기능은 로컬에서 server.py를 실행해 사용하세요.',
     staticUploadDisabled:'정적 호스팅에서는 업로드가 비활성화됩니다.',
     staticDetachDisabled:'정적 호스팅에서는 할당 해제가 비활성화됩니다.',
-    staticSyncDisabled:'정적 호스팅에서는 YouTube 동기화가 비활성화됩니다.'
+    staticSyncDisabled:'정적 호스팅에서는 YouTube 동기화가 비활성화됩니다.',
+    cleanStale:'매핑 정리',
+    cleanStaleConfirm:'{count}개의 오래된 자막 매핑을 제거하시겠습니까?\n다음 파일이 더 이상 디스크에 존재하지 않습니다:\n\n{files}',
+    cleanStaleDone:'{count}개의 오래된 매핑을 제거했습니다.',
+    cleanStaleNone:'오래된 매핑이 없습니다.',
+    batchConflictTooltip:'이미 해당 언어의 자막이 있습니다 — 대체됩니다',
+    batchChangeLang:'클릭하여 감지된 언어 변경'
   },
   ja:{
     pageTitle:'MEU 字幕管理',openApp:'検索アプリを開く',searchVideos:'動画を検索...',
@@ -95,7 +108,13 @@ var UI_TEXT={
     staticModeNotice:'⚠️ 静的ホスティングで実行中です。管理機能(アップロード、割り当て、同期)は無効です。ローカルで server.py を実行すると管理できます。',
     staticUploadDisabled:'静的ホスティングではアップロードできません。',
     staticDetachDisabled:'静的ホスティングでは割り当て解除できません。',
-    staticSyncDisabled:'静的ホスティングではYouTube同期はできません。'
+    staticSyncDisabled:'静的ホスティングではYouTube同期はできません。',
+    cleanStale:'マッピング整理',
+    cleanStaleConfirm:'{count} 件の古い字幕マッピングを削除しますか？\n以下のファイルはディスク上に存在しません：\n\n{files}',
+    cleanStaleDone:'{count} 件の古いマッピングを削除しました。',
+    cleanStaleNone:'古いマッピングはありません。',
+    batchConflictTooltip:'この言語の字幕が既に存在します — 置き換えられます',
+    batchChangeLang:'クリックして検出言語を変更'
   },
   zh:{
     pageTitle:'MEU 字幕管理',openApp:'打开搜索页面',searchVideos:'搜索视频...',
@@ -119,7 +138,13 @@ var UI_TEXT={
     staticModeNotice:'⚠️ 当前运行在静态托管环境。管理功能（上传、绑定、同步）已禁用。请在本地运行 server.py 获取完整管理权限。',
     staticUploadDisabled:'静态托管中无法上传。',
     staticDetachDisabled:'静态托管中无法解除绑定。',
-    staticSyncDisabled:'静态托管中无法同步 YouTube。'
+    staticSyncDisabled:'静态托管中无法同步 YouTube。',
+    cleanStale:'清理失效',
+    cleanStaleConfirm:'确定要移除 {count} 个失效字幕映射吗？\n这些文件已不存在于磁盘上：\n\n{files}',
+    cleanStaleDone:'已移除 {count} 个失效映射。',
+    cleanStaleNone:'没有失效的映射。',
+    batchConflictTooltip:'该语言已有字幕 — 将被替换',
+    batchChangeLang:'点击修改识别语言'
   }
 };
 function t(key,vars){
@@ -131,7 +156,7 @@ function setText(id,key){var el=document.getElementById(id);if(el)el.textContent
 function setPlaceholder(id,key){var el=document.getElementById(id);if(el)el.placeholder=t(key);}
 function applyUiText(){
   setText('pageTitle','pageTitle');setText('openAppLink','openApp');setPlaceholder('tableSearch','searchVideos');
-  setText('openUploadBtn','uploadSrt');setText('openBatchBtn','batchImport');setText('scanBtn','scan');setText('syncBtn','syncYoutube');setText('standardizeBtn','standardizeNames');setText('glossaryBtn','glossary');setText('logoutBtn','logout');
+  setText('openUploadBtn','uploadSrt');setText('openBatchBtn','batchImport');setText('scanBtn','scan');setText('syncBtn','syncYoutube');setText('standardizeBtn','standardizeNames');setText('cleanStaleBtn','cleanStale');setText('glossaryBtn','glossary');setText('logoutBtn','logout');
   setText('scannerTitle','scannerTitle');setText('titleTh','title');setText('durationTh','duration');setText('publishedTh','published');setText('subtitlesTh','subtitles');
   setText('sortDefault','sortDefault');setText('sortTitle','sortTitle');setText('sortDuration','sortDuration');setText('sortPublished','sortPublished');
   setText('uploadTitle','uploadTitle');setText('uploadFileLabel','selectSrt');setText('dropText','dropText');
@@ -180,6 +205,8 @@ function applyStaticMode(){
   document.getElementById('openBatchBtn').style.display='none';
   document.getElementById('scanBtn').style.display='none';
   document.getElementById('syncBtn').style.display='none';
+  document.getElementById('standardizeBtn').style.display='none';
+  document.getElementById('cleanStaleBtn').style.display='none';
   // Re-render table without +/- controls
   renderTable();
 }
@@ -418,7 +445,7 @@ var batchFiles=[],batchResults=[];
 
 function openBatchModal(){
   document.getElementById('batchModal').classList.add('show');
-  batchFiles=[];batchResults=[];
+  batchFiles=[];batchResults=[];langOverrides={};
   document.getElementById('batchFiles').value='';
   document.getElementById('batchPreview').style.display='none';
   document.getElementById('batchImportBtn').disabled=true;
@@ -429,6 +456,7 @@ function closeBatchModal(){
     var files=batchResults.map(function(r){return r.filename});
     api('POST','/api/srt/cleanup-batch',{files:files}).catch(function(){});
   }
+  langOverrides={};
   document.getElementById('batchModal').classList.remove('show');
 }
 
@@ -455,14 +483,34 @@ function renderBatchPreview(){
   for(var i=0;i<batchResults.length;i++){
     var f=batchResults[i];
     var matchOk=f.matchScore>=0.7;
-    html+='<tr style="border-bottom:1px solid var(--border)">';
-    html+='<td style="padding:6px 8px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(f.filename)+'">'+esc(f.filename)+'</td>';
-    html+='<td style="padding:6px 8px;text-align:center"><span class="lang-badge" style="font-size:10px">'+(langLabels[f.detectedLang]||f.detectedLang.toUpperCase())+'</span></td>';
+    var effectiveLang=langOverrides[f.filename]||f.detectedLang;
+
+    // Check conflict: matched video already has this language
+    var conflict=false;
+    if(matchOk){
+      var vid=allVideos.find(function(v){return v.videoId===f.suggestedVideoId});
+      conflict=vid&&vid.subtitles&&vid.subtitles[effectiveLang];
+    }
+
+    html+='<tr style="border-bottom:1px solid var(--border)" data-fn="'+esc(f.filename)+'">';
+    html+='<td style="padding:6px 8px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+esc(f.filename)+'">'+esc(f.filename)+'</td>';
+    // Language dropdown
+    html+='<td style="padding:4px 6px;text-align:center">';
+    html+='<select class="batch-lang-select" onchange="onBatchLangChange(this)" title="'+t('batchChangeLang')+'">';
+    for(var l=0;l<langOrder.length;l++){
+      var sel=langOrder[l]===effectiveLang?' selected':'';
+      html+='<option value="'+langOrder[l]+'"'+sel+'>'+(langLabels[langOrder[l]]||langOrder[l].toUpperCase())+'</option>';
+    }
+    html+='</select></td>';
     html+='<td style="padding:6px 8px;text-align:center">~'+f.subtitleCount+'</td>';
-    html+='<td style="padding:6px 8px;font-size:11px;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:'+(matchOk?'var(--green)':'var(--red)')+'" title="'+(f.suggestedTitle||'')+'">';
+    html+='<td style="padding:6px 8px;font-size:11px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:'+(matchOk?'var(--green)':'var(--red)')+'" title="'+(f.suggestedTitle||'')+'">';
     html+=matchOk?esc((f.suggestedTitle||'').substring(0,50)):t('matchFailed');
     html+='</td>';
-    html+='<td style="padding:6px 8px;text-align:center;font-weight:600;color:'+(matchOk?'var(--green)':'var(--red)')+'">'+Math.round(f.matchScore*100)+'%</td>';
+    html+='<td class="batch-score-cell" style="padding:6px 8px;text-align:center;font-weight:600;color:'+(matchOk?'var(--green)':'var(--red)')+'">'+Math.round(f.matchScore*100)+'%';
+    if(conflict){
+      html+=' <span class="batch-conflict-warn" style="font-size:9px;color:var(--orange);cursor:help" title="'+t('batchConflictTooltip')+'">⚠️</span>';
+    }
+    html+='</td>';
     html+='</tr>';
   }
 
@@ -474,12 +522,43 @@ function renderBatchPreview(){
   document.getElementById('batchImportBtn').disabled=false;
 }
 
+function onBatchLangChange(selectEl){
+  var newLang=selectEl.value;
+  var row=selectEl.closest('tr');
+  var filename=row.getAttribute('data-fn');
+  langOverrides[filename]=newLang;
+
+  // Find matching batch result
+  var f=batchResults.find(function(r){return r.filename===filename});
+  if(!f||!f.suggestedVideoId||f.matchScore<0.7)return;
+
+  // Update conflict indicator for this row only
+  var vid=allVideos.find(function(v){return v.videoId===f.suggestedVideoId});
+  var conflict=vid&&vid.subtitles&&vid.subtitles[newLang];
+  var scoreCell=row.querySelector('.batch-score-cell');
+  if(!scoreCell)return;
+
+  // Remove existing conflict warning
+  var existing=scoreCell.querySelector('.batch-conflict-warn');
+  if(existing)existing.remove();
+
+  if(conflict){
+    var span=document.createElement('span');
+    span.className='batch-conflict-warn';
+    span.style.cssText='font-size:9px;color:var(--orange);cursor:help';
+    span.title=t('batchConflictTooltip');
+    span.textContent=' ⚠️';
+    scoreCell.appendChild(span);
+  }
+}
+
 function doBatchImport(){
   var assignments=[];
   for(var i=0;i<batchResults.length;i++){
     var f=batchResults[i];
     if(f.suggestedVideoId&&f.matchScore>=0.7){
-      assignments.push({videoId:f.suggestedVideoId,lang:f.detectedLang,filename:f.filename});
+      var assignedLang=langOverrides[f.filename]||f.detectedLang;
+      assignments.push({videoId:f.suggestedVideoId,lang:assignedLang,filename:f.filename});
     }
   }
 
@@ -572,6 +651,20 @@ function standardizeSubtitles(){
   api('POST','/api/subtitles/standardize',{}).then(function(r){
     toast(t('standardized',{renamed:r.renamed,skipped:r.skipped}),'success');
     loadData();
+  }).catch(function(e){toast(t('failed',{message:e.message}),'error')})
+  .finally(function(){btn.disabled=false});
+}
+
+function cleanStaleMappings(){
+  var btn=document.getElementById('cleanStaleBtn');
+  btn.disabled=true;
+  api('POST','/api/mapping/cleanup',{}).then(function(r){
+    if(r.cleaned===0){
+      toast(t('cleanStaleNone'),'success');
+    }else{
+      toast(t('cleanStaleDone',{count:r.cleaned}),'success');
+      loadData();
+    }
   }).catch(function(e){toast(t('failed',{message:e.message}),'error')})
   .finally(function(){btn.disabled=false});
 }

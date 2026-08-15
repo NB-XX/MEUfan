@@ -436,7 +436,7 @@ class APIHandler(SimpleHTTPRequestHandler):
         if path not in public and path in {
             '/api/upload', '/api/upload-batch', '/api/assign-batch', '/api/assign', '/api/mapping',
             '/api/sync', '/api/glossary', '/api/subtitles/standardize', '/api/subtitle/save',
-            '/api/srt/cleanup-batch'
+            '/api/srt/cleanup-batch', '/api/mapping/cleanup'
         } and not self.require_admin():
             return
         if path == '/api/upload':
@@ -459,6 +459,8 @@ class APIHandler(SimpleHTTPRequestHandler):
             self.handle_save_subtitle_cue()
         elif path == '/api/srt/cleanup-batch':
             self.handle_cleanup_batch()
+        elif path == '/api/mapping/cleanup':
+            self.handle_mapping_cleanup()
         else:
             self.send_json({'error': 'Not found'}, 404)
 
@@ -675,6 +677,15 @@ class APIHandler(SimpleHTTPRequestHandler):
         filename = normalize_srt_ref(filename)
         for v in mapping.get('videos', []):
             if v.get('videoId') == video_id:
+                # Clean up old subtitle file when replacing
+                old_ref = v.get('subtitles', {}).get(lang)
+                if old_ref:
+                    try:
+                        _, old_path = safe_subtitle_path(old_ref, must_exist=True)
+                        backup_file(old_path, 'srt_overwrite')
+                        old_path.unlink()
+                    except Exception:
+                        pass
                 new_rel = SUBTITLE_PREFIX + make_srt_filename(lang, video_id, v.get('title', video_id))
                 new_rel = rename_srt_file(filename, new_rel)
                 v.setdefault('subtitles', {})[lang] = new_rel
@@ -719,13 +730,19 @@ class APIHandler(SimpleHTTPRequestHandler):
         for v in mapping.get('videos', []):
             if v.get('videoId') == video_id:
                 if remove:
-                    old_file = v.get('subtitles', {}).pop(lang, None)
+                    old_file = v.get('subtitles', {}).get(lang)
                     if old_file:
+                        # Delete the file first, then remove from mapping
                         try:
-                            _, filepath = safe_subtitle_path(old_file, must_exist=True)
-                            filepath.unlink()
-                        except Exception:
-                            pass
+                            _, filepath = safe_subtitle_path(old_file)
+                            if filepath.exists():
+                                backup_file(filepath, 'srt_detach')
+                                filepath.unlink()
+                        except ValueError as e:
+                            print(f'  [warn] Invalid subtitle ref on unassign: {old_file}: {e}')
+                        except OSError as e:
+                            print(f'  [warn] Could not delete subtitle on unassign: {old_file}: {e}')
+                        v.get('subtitles', {}).pop(lang, None)
                     save_mapping(mapping)
                     self.log_action('unassign_srt', videoId=video_id, lang=lang, file=old_file)
                     self.send_json({'ok': True, 'filename': None})
@@ -796,6 +813,29 @@ class APIHandler(SimpleHTTPRequestHandler):
                 failed.append({'filename': filename, 'error': str(e)})
         self.log_action('cleanup_batch', deleted=len(deleted), failed=len(failed))
         self.send_json({'ok': True, 'deleted': deleted, 'failed': failed})
+
+    def handle_mapping_cleanup(self):
+        mapping = load_mapping()
+        cleaned = 0
+        removed = []
+        for v in mapping.get('videos', []):
+            subs = v.get('subtitles', {})
+            stale = []
+            for lang, ref in list(subs.items()):
+                try:
+                    _, path = safe_subtitle_path(ref)
+                    if not path.exists():
+                        stale.append((lang, ref))
+                except (ValueError, FileNotFoundError):
+                    stale.append((lang, ref))
+            for lang, ref in stale:
+                del subs[lang]
+                removed.append({'videoId': v['videoId'], 'title': v.get('title', ''), 'lang': lang, 'file': ref})
+                cleaned += 1
+        if cleaned:
+            save_mapping(mapping)
+        self.log_action('cleanup_stale_mappings', cleaned=cleaned)
+        self.send_json({'ok': True, 'cleaned': cleaned, 'removed': removed})
 
     def handle_scan(self):
         from difflib import SequenceMatcher
